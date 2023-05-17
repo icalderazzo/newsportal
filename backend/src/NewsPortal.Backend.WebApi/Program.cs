@@ -1,5 +1,4 @@
 using NewsPortal.Backend.Infrastructure;
-using NewsPortal.Backend.Infrastructure.Http.HackerNews;
 
 var builder = WebApplication.CreateBuilder(args);
 
