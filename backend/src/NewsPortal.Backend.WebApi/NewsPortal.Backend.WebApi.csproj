@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\NewsPortal.Backend.Application\NewsPortal.Backend.Application.csproj" />
       <ProjectReference Include="..\NewsPortal.Backend.Infrastructure\NewsPortal.Backend.Infrastructure.csproj" />
     </ItemGroup>
 

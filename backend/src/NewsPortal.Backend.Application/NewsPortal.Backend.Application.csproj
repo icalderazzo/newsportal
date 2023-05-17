@@ -6,4 +6,16 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="12.0.1" />
+      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\NewsPortal.Backend.Contracts\NewsPortal.Backend.Contracts.csproj" />
+      <ProjectReference Include="..\NewsPortal.Backend.Infrastructure\NewsPortal.Backend.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>
