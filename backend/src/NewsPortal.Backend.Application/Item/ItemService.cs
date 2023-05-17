@@ -3,7 +3,6 @@ using Microsoft.Extensions.Caching.Memory;
 using NewsPortal.Backend.Application.Services;
 using NewsPortal.Backend.Contracts.Dtos;
 using NewsPortal.Backend.Contracts.Filters;
-using NewsPortal.Backend.Contracts.Responses;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews;
 
 namespace NewsPortal.Backend.Application.Item;
@@ -24,7 +23,7 @@ internal class ItemService : IItemService
         _mapper = mapper;
     }
 
-    public async Task<PagedResponse<List<ItemDto>>> GetNewestStories(PaginationFilter paginationFilter)
+    public async Task<(List<ItemDto>, int)> GetNewestStories(PaginationFilter paginationFilter)
     {
         //  Get new story ids
         var newStoriesResponse = await _hackerNewsClient.GetNewStories();
@@ -63,7 +62,7 @@ internal class ItemService : IItemService
             //  Make resource thread safe
             lock (items) if (story != null) items.Add(story);
         });
-
-        return new PagedResponse<List<ItemDto>>(items, paginationFilter.PageNumber, paginationFilter.PageSize);
+        
+        return new ValueTuple<List<ItemDto>, int>(items, newStoriesResponse.Data!.Count);
     }
 }
