@@ -1,57 +1,31 @@
 ﻿using Microsoft.Extensions.Options;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews.Configuration;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews.Models;
+using NewsPortal.Backend.Infrastructure.Http.HackerNews.Models.Contracts;
 using Newtonsoft.Json;
 using RestSharp;
 
 namespace NewsPortal.Backend.Infrastructure.Http.HackerNews.Client;
 
-internal class HackerNewsClient : IHackerNewsClient
+internal sealed class HackerNewsClient : BaseHackerNewsClient, IHackerNewsClient
 {
-    private readonly RestClient _client;
-
-    public HackerNewsClient(IOptions<HackerNewsOptions> options)
+    public HackerNewsClient(IOptions<HackerNewsOptions> options) : base(options)
     {
-        _client = new RestClient($"{options.Value.BaseUrl}/v{options.Value.Version}");
     }
     
-    public async Task<Item> GetItemById(int itemId)
+    public async Task<HackerNewsClientResponse<Item>> GetItemById(int itemId)
     {
         var itemUri = string.Format(Endpoints.Items.GetById, itemId);
-        var req = new RestRequest(itemUri);
-        req.AddQueryParameter("print", "pretty");
-
-        var response = await _client.GetAsync(req);
-        var item = JsonConvert.DeserializeObject<Item>(response.Content!);
-
-        if (item is null) throw new Exception("Unexpected error in request processing");
-
-        return item;
+        return await Get<Item>(itemUri);
     }
 
-    public async Task<List<int>> GetTopStories()
+    public async Task<HackerNewsClientResponse<List<int>>> GetTopStories()
     {
-        var req = new RestRequest(Endpoints.Items.TopStories);
-        req.AddQueryParameter("print", "pretty");
-
-        var response = await _client.GetAsync(req);
-        var topStories = JsonConvert.DeserializeObject<List<int>>(response.Content!);
-
-        if (topStories is null) throw new Exception("Unexpected error in request processing");
-
-        return topStories;
+        return await Get<List<int>>(Endpoints.Items.TopStories);
     }
 
-    public async Task<List<int>> GetNewStories()
+    public async Task<HackerNewsClientResponse<List<int>>> GetNewStories()
     {
-        var req = new RestRequest(Endpoints.Items.NewStories);
-        req.AddQueryParameter("print", "pretty");
-
-        var response = await _client.GetAsync(req);
-        var newStories = JsonConvert.DeserializeObject<List<int>>(response.Content!);
-
-        if (newStories is null) throw new Exception("Unexpected error in request processing");
-
-        return newStories;
+        return await Get<List<int>>(Endpoints.Items.NewStories);
     }
 }
