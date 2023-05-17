@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Caching.Memory;
 using NewsPortal.Backend.Application.Services;
 using NewsPortal.Backend.Contracts.Dtos;
+using NewsPortal.Backend.Contracts.Filters;
+using NewsPortal.Backend.Contracts.Responses;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews;
 
 namespace NewsPortal.Backend.Application.Item;
@@ -22,15 +24,22 @@ internal class ItemService : IItemService
         _mapper = mapper;
     }
 
-    public async Task<List<ItemDto>> GetNewestStories()
+    public async Task<PagedResponse<List<ItemDto>>> GetNewestStories(PaginationFilter paginationFilter)
     {
-        var result = new List<ItemDto>();
-        
         //  Get new story ids
-        var newStories = await _hackerNewsClient.GetNewStories();
+        var newStoriesResponse = await _hackerNewsClient.GetNewStories();
+        
+        //  Order and page ids
+        var newStories = newStoriesResponse.Data!
+            .OrderByDescending(x => x)
+            .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+            .Take(paginationFilter.PageSize)
+            .ToList();
+
+        var items = new List<ItemDto>();
         
         //  Execute get or create async in parallel 
-        await Parallel.ForEachAsync(newStories.Data! ,async(storyId, cancellationToken) =>
+        await Parallel.ForEachAsync(newStories ,async(storyId, cancellationToken) =>
         {
             //  Get Item from cache or call the API
             var story = await _memoryCache.GetOrCreateAsync<ItemDto>(
@@ -52,9 +61,9 @@ internal class ItemService : IItemService
                 });
             
             //  Make resource thread safe
-            lock (result) if (story != null) result.Add(story);
+            lock (items) if (story != null) items.Add(story);
         });
 
-        return result;
+        return new PagedResponse<List<ItemDto>>(items, paginationFilter.PageNumber, paginationFilter.PageSize);
     }
 }
