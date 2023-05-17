@@ -4,6 +4,7 @@ using NewsPortal.Backend.Application.Services;
 using NewsPortal.Backend.Contracts.Dtos;
 using NewsPortal.Backend.Contracts.Filters;
 using NewsPortal.Backend.Contracts.Responses;
+using NewsPortal.Backend.WebApi.Helpers;
 
 namespace NewsPortal.Backend.WebApi.Controllers;
 
@@ -29,7 +30,14 @@ public class ItemController : ControllerBase
     {
         try
         {
-            return Ok(await _itemService.GetNewestStories(paginationFilter));
+            var storiesResult = await _itemService.GetNewestStories(paginationFilter);
+            var response = PaginationHelper.CreatePagedResponse(
+                storiesResult.Item1, 
+                paginationFilter, 
+                storiesResult.Item2, 
+                UriHelper.GetRequestBaseUri(Request));
+            
+            return Ok(response);
         }
         catch (Exception)
         {
