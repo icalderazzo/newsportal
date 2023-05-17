@@ -6,4 +6,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\NewsPortal.Backend.Infrastructure\NewsPortal.Backend.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>
