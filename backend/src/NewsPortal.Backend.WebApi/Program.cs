@@ -1,9 +1,20 @@
+using Microsoft.OpenApi.Models;
 using NewsPortal.Backend.Application;
-using NewsPortal.Backend.Application.Services;
 using NewsPortal.Backend.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//  Add services to container.
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "News Portal API",
+        Version = "v1"
+    });
+});
 builder.Services.AddMemoryCache();
 builder.Services.AddApplicationServices();
 builder.Services.AddHackerNewsClient(conf =>
@@ -14,18 +25,13 @@ builder.Services.AddHackerNewsClient(conf =>
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+app.UseSwagger();
+app.UseSwaggerUI(opt => opt.DefaultModelsExpandDepth(-1));
 
-app.MapGet("/stories", async (IItemService itemService) =>
-{
-    try
-    {
-        return Results.Ok(await itemService.GetNewestStories());
-    }
-    catch (Exception)
-    {
-        return Results.StatusCode(500);
-    }
-});
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();
