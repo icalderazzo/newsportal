@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace NewsPortal.Backend.Infrastructure.Http.HackerNews.Models;
+namespace NewsPortal.Backend.Infrastructure.Http.HackerNews.Models.Contracts;
 
 public class Item
 {
