@@ -1,9 +1,11 @@
 using NewsPortal.Backend.Application;
-using NewsPortal.Backend.Application.Services;
 using NewsPortal.Backend.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//  Add services to container.
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddMemoryCache();
 builder.Services.AddApplicationServices();
 builder.Services.AddHackerNewsClient(conf =>
@@ -14,18 +16,10 @@ builder.Services.AddHackerNewsClient(conf =>
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+app.UseHttpsRedirection();
 
-app.MapGet("/stories", async (IItemService itemService) =>
-{
-    try
-    {
-        return Results.Ok(await itemService.GetNewestStories());
-    }
-    catch (Exception)
-    {
-        return Results.StatusCode(500);
-    }
-});
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();
