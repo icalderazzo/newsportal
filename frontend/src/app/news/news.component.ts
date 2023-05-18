@@ -15,18 +15,21 @@ export class NewsComponent implements OnInit {
   newsResponse: NewsPortalPagedResponse<News[]> | undefined;  
   currentNews: News[] | undefined;
   totalNewsCount: number | undefined;
+  loading = true;
 
   ngOnInit(): void {
     this.loadNews();
   }
 
-  loadNews(pageNumber = 1, pageSize = 10)
+  loadNews(pageNumber = 1, pageSize = 5)
   {
+    this.loading = true;
     try {
       this.newsPortalService.getLatestNews(pageNumber, pageSize).subscribe((data) => {
         this.newsResponse = data;
         this.totalNewsCount = data.totalRecords;
         this.currentNews = data.data;
+        this.loading = false;
       }); 
     } catch (error) {
       console.log(error);  

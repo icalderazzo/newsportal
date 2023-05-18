@@ -16,7 +16,7 @@ export class NewspaginatorComponent {
    */
   @Output() changePageEvent = new EventEmitter<[number, number]>();
 
-  pageSize = 10;
+  pageSize = 5;
   pageIndex = 0;
   pageSizeOptions = [5, 10]
   
