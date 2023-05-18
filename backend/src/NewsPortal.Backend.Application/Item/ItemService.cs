@@ -28,9 +28,8 @@ internal class ItemService : IItemService
         //  Get new story ids
         var newStoriesResponse = await _hackerNewsClient.GetNewStories();
         
-        //  Order and page ids
+        //  Apply pagination
         var newStories = newStoriesResponse.Data!
-            .OrderByDescending(x => x)
             .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
             .Take(paginationFilter.PageSize)
             .ToList();
@@ -62,6 +61,9 @@ internal class ItemService : IItemService
             //  Make resource thread safe
             lock (items) if (story != null) items.Add(story);
         });
+
+        //  Order news list
+        items = items.OrderByDescending(x => x.Id).ToList();
         
         return new ValueTuple<List<ItemDto>, int>(items, newStoriesResponse.Data!.Count);
     }
