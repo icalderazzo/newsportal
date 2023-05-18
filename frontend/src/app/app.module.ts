@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { HttpClientModule } from '@angular/common/http'
 
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { NewsModule } from './news/news.module';
 
 @NgModule({
@@ -18,6 +19,7 @@ import { NewsModule } from './news/news.module';
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    MatToolbarModule,
     NewsModule
   ],
   providers: [],

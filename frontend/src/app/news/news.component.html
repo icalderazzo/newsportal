@@ -1,15 +1,23 @@
-<div>
-    <h1>Latests news!</h1>
-</div>
+<div class="news-box">
+    <div>
+        <h1>Latests news!</h1>
+    </div>
+    
+    <mat-divider/>
 
-<div *ngFor="let n of currentNews">
-    <news-card
-        [title]="n.title"
-        [text]="n.text"
-        [url]="n.url"
-    />
-</div>
+    <br>
 
-<div>
-    <news-paginator [length]="totalNewsCount" (changePageEvent)="changePage($event)" />
+    <div *ngFor="let n of currentNews">
+        <news-card
+            [title]="n.title"
+            [text]="n.text"
+            [url]="n.url"
+        />
+    </div>
+    
+    <mat-divider/>
+
+    <div>
+        <news-paginator [length]="totalNewsCount" (changePageEvent)="changePage($event)" />
+    </div>
 </div>
