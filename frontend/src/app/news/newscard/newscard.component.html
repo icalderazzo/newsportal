@@ -1,0 +1,10 @@
+<mat-card>
+    <mat-card-header>{{ title }}</mat-card-header>
+    <mat-card-content *ngIf="text">
+        {{ text }}
+    </mat-card-content>
+    <mat-card-actions align="end" *ngIf="url">
+        <button mat-button>Go to source</button>
+    </mat-card-actions>
+</mat-card>
+<br>
