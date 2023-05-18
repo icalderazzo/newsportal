@@ -11,5 +11,5 @@
 </div>
 
 <div>
-    <news-paginator (changePageEvent)="changePage($event)" />
+    <news-paginator [length]="totalNewsCount" (changePageEvent)="changePage($event)" />
 </div>
