@@ -3,8 +3,7 @@ import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'news-paginator',
-  templateUrl: './newspaginator.component.html',
-  styleUrls: ['./newspaginator.component.css']
+  templateUrl: './newspaginator.component.html'
 })
 export class NewspaginatorComponent {
   /**
