@@ -28,6 +28,12 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI(opt => opt.DefaultModelsExpandDepth(-1));
 
+app.UseCors(x => x
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .SetIsOriginAllowed(o => true)
+    .AllowCredentials());
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
