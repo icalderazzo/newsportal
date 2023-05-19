@@ -5,6 +5,10 @@
     
     <mat-divider/>
 
+    <div *ngIf="loading">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+    
     <br>
 
     <div *ngFor="let n of currentNews">
@@ -15,9 +19,5 @@
         />
     </div>
     
-    <mat-divider/>
-
-    <div>
-        <news-paginator [length]="totalNewsCount" (changePageEvent)="changePage($event)" />
-    </div>
+    <news-paginator [length]="totalNewsCount" (changePageEvent)="changePage($event)" />
 </div>

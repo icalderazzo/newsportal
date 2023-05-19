@@ -18,7 +18,7 @@ export class NewsportalService {
 
   constructor(private http: HttpClient) { }
 
-  public getLatestNews(pageNumber = 1, pageSize = 10): Observable<NewsPortalPagedResponse<News[]>>{
+  public getLatestNews(pageNumber = 1, pageSize = 5): Observable<NewsPortalPagedResponse<News[]>>{
     return this.http.get<NewsPortalPagedResponse<News[]>>(`${this.baseUrl}${this.API_ROUTES.getLatestNews(pageNumber, pageSize)}`);
   }
 }
