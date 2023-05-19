@@ -22,15 +22,27 @@ public class ItemController : ControllerBase
     ///     Gets the newest stories.
     /// </summary>
     /// <param name="paginationFilter"></param>
+    /// <param name="searchString"></param>
     /// <returns></returns>
     [HttpGet("stories")]
     [ProducesResponseType(typeof(PagedResponse<List<ItemDto>>), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.InternalServerError)]
-    public async Task<IActionResult> GetStories([FromQuery] PaginationFilter paginationFilter)
+    public async Task<IActionResult> GetStories(
+        [FromQuery] PaginationFilter paginationFilter,
+        [FromQuery] string? searchString = null)
     {
         try
         {
-            var storiesResult = await _itemService.GetNewestStories(paginationFilter);
+            ValueTuple<List<ItemDto>, int> storiesResult;
+            if (string.IsNullOrEmpty(searchString))
+            {
+                storiesResult = await _itemService.GetNewestStories(paginationFilter);
+            }
+            else
+            {
+                storiesResult = await _itemService.SearchNews(searchString, paginationFilter);
+            }
+            
             var response = PaginationHelper.CreatePagedResponse(
                 storiesResult.Item1, 
                 paginationFilter, 
