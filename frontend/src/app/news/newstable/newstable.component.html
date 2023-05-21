@@ -1,0 +1,13 @@
+<div *ngIf="loading">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+
+<br>
+
+<div *ngFor="let n of news">
+    <news-card
+        [title]="n.title"
+        [text]="n.text"
+        [url]="n.url"
+    />
+</div>
