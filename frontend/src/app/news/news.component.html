@@ -1,23 +1,15 @@
 <div class="news-box">
+    <div *ngIf="showSearchBar">
+        <news-searchbar (searchNewsEvent)="search($event)" />
+    </div>
+
     <div>
         <h1>Latests news!</h1>
     </div>
     
     <mat-divider/>
 
-    <div *ngIf="loading">
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-    </div>
-    
-    <br>
-
-    <div *ngFor="let n of currentNews">
-        <news-card
-            [title]="n.title"
-            [text]="n.text"
-            [url]="n.url"
-        />
-    </div>
+    <news-table [loading]="loading" [news]="currentNews" />
     
     <news-paginator [length]="totalNewsCount" (changePageEvent)="changePage($event)" />
 </div>
