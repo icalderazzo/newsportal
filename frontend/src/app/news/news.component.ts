@@ -25,7 +25,7 @@ export class NewsComponent implements OnInit {
     this.loadNews();
   }
 
-  async loadNews(pageNumber = 1, pageSize = 5)
+  loadNews(pageNumber = 1, pageSize = 5)
   {
     this.loading = true;
     try {
