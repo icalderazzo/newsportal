@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using System.Collections.Concurrent;
+using Microsoft.Extensions.Caching.Memory;
 using NewsPortal.Backend.Application.Services;
 using NewsPortal.Backend.Contracts.Dtos;
 
@@ -16,23 +17,24 @@ public class ItemsCacheService : IItemsCacheService
     public async Task<List<ItemDto>> GetOrCreateItems(
         IEnumerable<int> itemIds, Func<int, Task<ItemDto?>> createItemFunc)
     {
-        var items = new List<ItemDto>();
+        //  Items concurrent collection
+        var items = new ConcurrentQueue<ItemDto>();
 
         //  Execute get or create async in parallel 
-        await Parallel.ForEachAsync(itemIds ,async(storyId, cancellationToken) =>
+        await Parallel.ForEachAsync(itemIds ,async(itemId, cancellationToken) =>
         {
             //  Get Item from cache or call the API
-            var story = await _memoryCache.GetOrCreateAsync<ItemDto>(
-                storyId,
+            var item = await _memoryCache.GetOrCreateAsync<ItemDto>(
+                itemId,
                 async entry =>
                 {
                     //  Get Item by its id
-                    var itemResponse = await createItemFunc(storyId);
-                    if (itemResponse is not null)
+                    var createItemResult = await createItemFunc(itemId);
+                    if (createItemResult is not null)
                     {
                         //  Add it to the cache for 10 min if the request succeeded
                         entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
-                        return itemResponse;
+                        return createItemResult;
                     }
                     
                     //  Add an empty object with zero life time if request failed
@@ -40,10 +42,9 @@ public class ItemsCacheService : IItemsCacheService
                     return new ItemDto();
                 });
             
-            //  Make resource thread safe
-            lock (items) if (story != null) items.Add(story);
+            if (item != null) items.Enqueue(item);
         });
         
-        return items;
+        return items.ToList();
     }
 }

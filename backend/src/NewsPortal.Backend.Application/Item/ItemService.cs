@@ -38,7 +38,7 @@ internal class ItemService : IItemService
         //  Get items from cache service
         var items = await _itemsCacheService.GetOrCreateItems(newStories, GetItemById);
 
-        //  Order news list
+        //  Order stories list by newest
         items = items.OrderByDescending(x => x.Id).ToList();
         
         return new ValueTuple<List<ItemDto>, int>(items, newStoriesResponse.Data!.Count);

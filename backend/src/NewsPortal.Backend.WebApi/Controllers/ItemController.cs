@@ -47,7 +47,8 @@ public class ItemController : ControllerBase
                 storiesResult.Item1, 
                 paginationFilter, 
                 storiesResult.Item2, 
-                UriHelper.GetRequestBaseUri(Request));
+                UriHelper.GetRequestBaseUri(Request),
+                searchString);
             
             return Ok(response);
         }
