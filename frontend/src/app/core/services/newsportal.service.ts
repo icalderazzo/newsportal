@@ -12,13 +12,22 @@ export class NewsportalService {
   
   baseUrl = environment.apis.newsportal.baseUrl;
 
+  defaultPageNumber = 1;
+  defaultPageSize = 5;
+
   private readonly API_ROUTES = {
-    getLatestNews: (pageNumber:number , pageSize: number) => `/stories?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    getLatestNews: (pageNumber:number , pageSize: number) => `/stories?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+    searchNews: (searchString: string, pageNumber:number , pageSize: number) => `/stories?searchString=${searchString}&pageNumber=${pageNumber}&pageSize=${pageSize}`
   }
 
   constructor(private http: HttpClient) { }
 
-  public getLatestNews(pageNumber = 1, pageSize = 5): Observable<NewsPortalPagedResponse<News[]>>{
+  public getLatestNews(pageNumber = this.defaultPageNumber, pageSize = this.defaultPageSize): Observable<NewsPortalPagedResponse<News[]>>{
     return this.http.get<NewsPortalPagedResponse<News[]>>(`${this.baseUrl}${this.API_ROUTES.getLatestNews(pageNumber, pageSize)}`);
+  }
+
+  public searchNews(searchString: string, pageNumber = this.defaultPageNumber, pageSize = this.defaultPageSize): Observable<NewsPortalPagedResponse<News[]>>{
+
+    return this.http.get<NewsPortalPagedResponse<News[]>>(`${this.baseUrl}${this.API_ROUTES.searchNews(searchString, pageNumber, pageSize)}`);
   }
 }

@@ -8,12 +8,19 @@ import { MatPaginatorModule} from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { NewstableComponent } from './newstable/newstable.component';
+import { NewssearchbarComponent } from './newssearchbar/newssearchbar.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     NewsComponent,
     NewscardComponent,
-    NewspaginatorComponent
+    NewspaginatorComponent,
+    NewstableComponent,
+    NewssearchbarComponent
   ],
   imports: [
     CommonModule,
@@ -21,7 +28,10 @@ import { MatDividerModule } from '@angular/material/divider';
     MatPaginatorModule,
     MatProgressBarModule,
     MatButtonModule,
-    MatDividerModule
+    MatDividerModule,
+    MatInputModule,
+    MatIconModule,
+    FormsModule
   ],
   exports:[
     NewsComponent

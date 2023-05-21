@@ -1,7 +1,13 @@
 <mat-toolbar color="primary">
     <mat-toolbar-row>
         <span>News Portal</span>
+        <div>
+            <button mat-button (click)="showSearchBar = !showSearchBar">
+                <mat-icon fontIcon="search"/>
+                Search
+            </button>
+        </div>
     </mat-toolbar-row>
 </mat-toolbar>
 
-<app-news />
+<app-news [showSearchBar]="showSearchBar" />
