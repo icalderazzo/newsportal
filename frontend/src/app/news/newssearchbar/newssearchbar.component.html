@@ -1,0 +1,5 @@
+<mat-form-field style="width: 100%;">
+    <mat-label>Search</mat-label>
+    <input matInput #message maxlength="256" [(ngModel)] = "searchString" (keyup.enter)="handleSearchEvent()">
+    <button matSuffix mat-button (click)="handleSearchEvent()"><mat-icon >search</mat-icon></button>
+</mat-form-field>
