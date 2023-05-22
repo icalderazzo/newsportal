@@ -3,6 +3,9 @@ using Newtonsoft.Json.Converters;
 
 namespace NewsPortal.Backend.Infrastructure.Http.HackerNews.Models.Contracts;
 
+/// <summary>
+///     Generic item object. Items could be: Stories, Comments, Jobs, Ask HNs and Polls.
+/// </summary>
 public class Item
 {
     public int Id { get; set; }

@@ -1,20 +1,20 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews.Client;
-using NewsPortal.Backend.Infrastructure.Http.HackerNews.Configuration;
+using NewsPortal.Backend.Infrastructure.Http.HackerNews.DependencyInjection;
 
 namespace NewsPortal.Backend.Infrastructure;
 
 public static class ConfigureServices
 {
     /// <summary>
-    ///     Configures the HackerNews Http Client.
+    ///     Configures Infrastructure Services.
     /// </summary>
     /// <param name="services">Service collection.</param>
-    /// <param name="config">Client configuration.</param>
-    public static void AddHackerNewsClient(this IServiceCollection services, Action<HackerNewsOptions> config)
+    /// <param name="hackerNewsClientConfig">HackerNewsClient configuration.</param>
+    public static void AddInfrastructureServices(this IServiceCollection services, 
+        Action<HackerNewsOptions> hackerNewsClientConfig)
     {
-        services.Configure(config);
-        services.AddScoped<IHackerNewsClient, HackerNewsClient>();
+        services.AddHackerNewsClient(hackerNewsClientConfig);
     }
 }

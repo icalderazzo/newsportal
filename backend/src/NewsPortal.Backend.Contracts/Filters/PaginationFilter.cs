@@ -1,4 +1,5 @@
-﻿namespace NewsPortal.Backend.Contracts.Filters;
+﻿
+namespace NewsPortal.Backend.Contracts.Filters;
 
 public class PaginationFilter
 {

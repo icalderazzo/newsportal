@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
-using NewsPortal.Backend.Infrastructure.Http.HackerNews.Configuration;
+using NewsPortal.Backend.Infrastructure.Http.HackerNews.DependencyInjection;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews.Models;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews.Models.Contracts;
 using Newtonsoft.Json;

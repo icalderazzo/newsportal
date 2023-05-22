@@ -1,18 +1,20 @@
 ﻿using AutoMapper;
 using NewsPortal.Backend.Application.Services;
 using NewsPortal.Backend.Contracts.Dtos;
+using NewsPortal.Backend.Contracts.Dtos.Item;
+using NewsPortal.Backend.Contracts.Dtos.Item.Story;
 using NewsPortal.Backend.Contracts.Filters;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews;
 
-namespace NewsPortal.Backend.Application.Item;
+namespace NewsPortal.Backend.Application.Item.Story;
 
-internal class ItemService : IItemService
+internal class StoriesService : IStoriesService
 {
     private readonly IHackerNewsClient _hackerNewsClient;
     private readonly IItemsCacheService _itemsCacheService;
     private readonly IMapper _mapper;
 
-    public ItemService(
+    public StoriesService(
         IHackerNewsClient hackerNewsClient,  
         IItemsCacheService itemsCacheService,
         IMapper mapper)
@@ -22,7 +24,7 @@ internal class ItemService : IItemService
         _mapper = mapper;
     }
 
-    public async Task<(List<ItemDto>, int)> GetNewestStories(PaginationFilter? paginationFilter = null)
+    public async Task<(List<StoryDto>, int)> GetNewestStories(PaginationFilter? paginationFilter = null)
     {
         //  Get new story ids
         var newStoriesResponse = await _hackerNewsClient.GetNewStories();
@@ -35,16 +37,16 @@ internal class ItemService : IItemService
                 .Take(paginationFilter.PageSize)
                 .ToList();
         
-        //  Get items from cache service
+        //  Get stories from cache service
         var items = await _itemsCacheService.GetOrCreateItems(newStories, GetItemById);
 
         //  Order stories list by newest
         items = items.OrderByDescending(x => x.Id).ToList();
         
-        return new ValueTuple<List<ItemDto>, int>(items, newStoriesResponse.Data!.Count);
+        return new ValueTuple<List<StoryDto>, int>(items, newStoriesResponse.Data!.Count);
     }
 
-    public async Task<(List<ItemDto>, int)> SearchNews(string searchString, PaginationFilter paginationFilter)
+    public async Task<(List<StoryDto>, int)> Search(string searchString, PaginationFilter paginationFilter)
     {
         //  Get new story ids
         var newStoriesResponse = await _hackerNewsClient.GetNewStories();
@@ -61,20 +63,20 @@ internal class ItemService : IItemService
             .Take(paginationFilter.PageSize)
             .ToList();
         
-        return new ValueTuple<List<ItemDto>, int>(items, items.Count);
+        return new ValueTuple<List<StoryDto>, int>(items, items.Count);
     }
 
     /// <summary>
-    ///     Calls GetItemById from HackerNews client and returns the object if request succeeded.
+    ///     Calls GetItemById from HackerNews client and returns the Story if request succeeded.
     /// </summary>
     /// <param name="id">The id of the item</param>
-    /// <returns>A nullable ItemDto.</returns>
-    private async Task<ItemDto?> GetItemById(int id)
+    /// <returns>A nullable StoryDto.</returns>
+    private async Task<StoryDto?> GetItemById(int id)
     {
-        ItemDto? result = null;
+        StoryDto? result = null;
         
         var itemResponse = await _hackerNewsClient.GetItemById(id);
-        if (itemResponse.Success) result = _mapper.Map<ItemDto>(itemResponse.Data);
+        if (itemResponse.Success) result = _mapper.Map<StoryDto>(itemResponse.Data);
 
         return result;
     }

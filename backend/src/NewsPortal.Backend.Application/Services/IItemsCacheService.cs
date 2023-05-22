@@ -1,4 +1,4 @@
-﻿using NewsPortal.Backend.Contracts.Dtos;
+﻿using NewsPortal.Backend.Contracts.Dtos.Item;
 
 namespace NewsPortal.Backend.Application.Services;
 
@@ -10,5 +10,5 @@ public interface IItemsCacheService
     /// <param name="itemIds">The specified items id list.</param>
     /// <param name="createItemFunc">Delegate to create items in case they're not present in the cache.</param>
     /// <returns></returns>
-    Task<List<ItemDto>> GetOrCreateItems(IEnumerable<int> itemIds, Func<int, Task<ItemDto?>> createItemFunc);
+    Task<List<T>> GetOrCreateItems<T>(IEnumerable<int> itemIds, Func<int, Task<T?>> createItemFunc) where T : ItemDto;
 }

@@ -17,7 +17,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddMemoryCache();
 builder.Services.AddApplicationServices();
-builder.Services.AddHackerNewsClient(conf =>
+builder.Services.AddInfrastructureServices(conf =>
 {
     conf.BaseUrl = builder.Configuration["Apis:HackerNews:BaseUrl"];
     conf.Version = builder.Configuration.GetValue<int>("Apis:HackerNews:Version");

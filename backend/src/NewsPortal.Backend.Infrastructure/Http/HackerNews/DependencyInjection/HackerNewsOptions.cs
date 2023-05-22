@@ -1,4 +1,4 @@
-﻿namespace NewsPortal.Backend.Infrastructure.Http.HackerNews.Configuration;
+﻿namespace NewsPortal.Backend.Infrastructure.Http.HackerNews.DependencyInjection;
 
 public class HackerNewsOptions
 {

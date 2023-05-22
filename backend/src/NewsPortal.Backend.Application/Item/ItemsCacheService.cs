@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using Microsoft.Extensions.Caching.Memory;
 using NewsPortal.Backend.Application.Services;
-using NewsPortal.Backend.Contracts.Dtos;
+using NewsPortal.Backend.Contracts.Dtos.Item;
 
 namespace NewsPortal.Backend.Application.Item;
 
@@ -14,17 +14,17 @@ public class ItemsCacheService : IItemsCacheService
         _memoryCache = memoryCache;
     }
     
-    public async Task<List<ItemDto>> GetOrCreateItems(
-        IEnumerable<int> itemIds, Func<int, Task<ItemDto?>> createItemFunc)
+    public async Task<List<T>> GetOrCreateItems<T>(
+        IEnumerable<int> itemIds, Func<int, Task<T?>> createItemFunc) where T : ItemDto
     {
         //  Items concurrent collection
-        var items = new ConcurrentQueue<ItemDto>();
+        var items = new ConcurrentQueue<T>();
 
         //  Execute get or create async in parallel 
         await Parallel.ForEachAsync(itemIds ,async(itemId, cancellationToken) =>
         {
             //  Get Item from cache or call the API
-            var item = await _memoryCache.GetOrCreateAsync<ItemDto>(
+            var item = await _memoryCache.GetOrCreateAsync<T>(
                 itemId,
                 async entry =>
                 {
@@ -39,7 +39,7 @@ public class ItemsCacheService : IItemsCacheService
                     
                     //  Add an empty object with zero life time if request failed
                     entry.AbsoluteExpirationRelativeToNow = TimeSpan.Zero;
-                    return new ItemDto();
+                    return default!;
                 });
             
             //  Add item to the queue
