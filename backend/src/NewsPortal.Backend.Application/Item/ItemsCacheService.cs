@@ -42,7 +42,8 @@ public class ItemsCacheService : IItemsCacheService
                     return new ItemDto();
                 });
             
-            if (item != null) items.Enqueue(item);
+            //  Add item to the queue
+            if (item is not null && item.Id > 0) items.Enqueue(item);
         });
         
         return items.ToList();

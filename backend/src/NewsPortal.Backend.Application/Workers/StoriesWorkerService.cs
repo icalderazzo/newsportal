@@ -5,10 +5,11 @@ using NewsPortal.Backend.Application.Services;
 
 namespace NewsPortal.Backend.Application.Workers;
 
-public class StoriesWorkerService : BackgroundService
+public class StoriesWorkerService : IHostedService
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<StoriesWorkerService> _logger;
+    private bool _workCompleted;
     
     public StoriesWorkerService(
         IServiceProvider serviceProvider, 
@@ -18,19 +19,34 @@ public class StoriesWorkerService : BackgroundService
         _logger = logger;
     }
     
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
+        if (_workCompleted)
+            await Task.CompletedTask;
+
         try
         {
-            await DoWork(stoppingToken);
+            await DoWork(cancellationToken);
         }
         catch (Exception e)
         {
             _logger.LogError($"{nameof(StoriesWorkerService)} has thrown an exception: {e.Message}");
+
+        }
+        finally
+        {
+            _workCompleted = true;
         }
     }
+
+    public async Task StopAsync(CancellationToken cancellationToken)
+    {
+        _logger.LogInformation($"{nameof(StoriesWorkerService)} stopped.");
+        await Task.CompletedTask;
+    }
     
-    private async Task DoWork(CancellationToken stoppingToken)
+    private async Task DoWork(CancellationToken cancellationToken)
     {
         _logger.LogInformation($"{nameof(StoriesWorkerService)} is working.");
 
