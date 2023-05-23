@@ -16,45 +16,38 @@ public class ItemsCacheService : IItemsCacheService
     
     public async Task<List<T>> GetOrCreateItems<T>(
         IEnumerable<int> itemIds, Func<int, Task<T?>> createItemFunc) where T : ItemDto
-    {
-        try
-        {
-            //  Items concurrent collection
-            var items = new ConcurrentQueue<T>();
+    { 
+        //  Items concurrent collection
+        var items = new ConcurrentQueue<T>();
 
-            //  Execute get or create async in parallel 
-            await Parallel.ForEachAsync(itemIds ,async(itemId, cancellationToken) =>
-            {
-                //  Get Item from cache or call the API
-                var item = await _memoryCache.GetOrCreateAsync<T>(
-                    itemId,
-                    async entry =>
-                    {
-                        //  Get Item by its id
-                        var createItemResult = await createItemFunc(itemId);
-                        if (createItemResult is not null)
-                        {
-                            //  Add it to the cache for 10 min if the request succeeded
-                            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
-                            return createItemResult;
-                        }
-                    
-                        //  Add an empty object with zero life time if request failed
-                        entry.AbsoluteExpirationRelativeToNow = TimeSpan.Zero;
-                        return default!;
-                    });
-            
-                //  Add item to the queue
-                if (item is not null && item.Id > 0) items.Enqueue(item);
-            });
-        
-            return items.ToList();
-        }
-        catch (Exception e)
+        //  Execute get or create async in parallel 
+        await Parallel.ForEachAsync(itemIds ,async(itemId, cancellationToken) =>
         {
-            Console.WriteLine(e);
-            throw;
-        }
+            //  Get Item from cache or call the API
+            var item = await _memoryCache.GetOrCreateAsync<T>(
+                itemId,
+                async entry =>
+                {
+                    //  Get Item by its id
+                    var createItemResult = await createItemFunc(itemId);
+                    if (createItemResult is not null)
+                    {
+                        //  Add it to the cache for 10 min if the request succeeded
+                        entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
+                        return createItemResult;
+                    }
+                
+                    //  Add an empty object with zero life time if request failed
+                    entry.AbsoluteExpirationRelativeToNow = TimeSpan.Zero;
+                    return default!;
+                });
+        
+            //  Add item to the queue
+            if (item is not null && item.Id > 0) items.Enqueue(item);
+        });
+    
+        return items.ToList();
+        
     }
 
     public async Task UpdateItems<T>(
