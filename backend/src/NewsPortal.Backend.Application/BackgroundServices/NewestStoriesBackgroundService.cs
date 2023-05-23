@@ -45,7 +45,7 @@ public class NewestStoriesBackgroundService : IHostedService
         _logger.LogInformation($"{nameof(NewestStoriesBackgroundService)} is working.");
 
         using var scope = _serviceProvider.CreateScope();
-        var itemService = scope.ServiceProvider.GetRequiredService<IStoriesService>();
-        await itemService.GetNewestStories();
+        var storiesService = scope.ServiceProvider.GetRequiredService<IStoriesService>();
+        await storiesService.GetNewestStories();
     }
 }
