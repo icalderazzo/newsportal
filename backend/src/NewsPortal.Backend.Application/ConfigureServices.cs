@@ -4,6 +4,7 @@ using NewsPortal.Backend.Application.BackgroundServices;
 using NewsPortal.Backend.Application.Item;
 using NewsPortal.Backend.Application.Item.Story;
 using NewsPortal.Backend.Application.Services;
+using NewsPortal.Backend.Contracts.Dtos.Item.Story;
 
 namespace NewsPortal.Backend.Application;
 
@@ -13,9 +14,10 @@ public static class ConfigureServices
     {
         //  Background Hosted Services
         services.AddHostedService<NewestStoriesBackgroundService>();
+        services.AddHostedService<UpdateStoriesBackgroundService>();
         
-        //  Application Services
         services.AddScoped<IItemsCacheService, ItemsCacheService>();
+        services.AddScoped<IItemService<StoryDto>, StoriesService>();
         services.AddScoped<IStoriesService, StoriesService>();
 
         //  AutoMapper

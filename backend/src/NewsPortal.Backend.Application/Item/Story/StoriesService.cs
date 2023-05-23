@@ -1,33 +1,24 @@
 ﻿using AutoMapper;
 using NewsPortal.Backend.Application.Services;
-using NewsPortal.Backend.Contracts.Dtos;
-using NewsPortal.Backend.Contracts.Dtos.Item;
 using NewsPortal.Backend.Contracts.Dtos.Item.Story;
 using NewsPortal.Backend.Contracts.Filters;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews;
 
 namespace NewsPortal.Backend.Application.Item.Story;
 
-internal class StoriesService : IStoriesService
+internal class StoriesService : BaseItemService<StoryDto>, IStoriesService 
 {
-    private readonly IHackerNewsClient _hackerNewsClient;
-    private readonly IItemsCacheService _itemsCacheService;
-    private readonly IMapper _mapper;
-
     public StoriesService(
         IHackerNewsClient hackerNewsClient,  
         IItemsCacheService itemsCacheService,
-        IMapper mapper)
+        IMapper mapper) : base(hackerNewsClient, itemsCacheService, mapper)
     {
-        _hackerNewsClient = hackerNewsClient;
-        _itemsCacheService = itemsCacheService;
-        _mapper = mapper;
     }
 
     public async Task<(List<StoryDto>, int)> GetNewestStories(PaginationFilter? paginationFilter = null)
     {
         //  Get new story ids
-        var newStoriesResponse = await _hackerNewsClient.GetNewStories();
+        var newStoriesResponse = await HackerNewsClient.GetNewStories();
         var newStories = newStoriesResponse.Data!;
         
         //  Apply pagination if filter has been passed
@@ -38,7 +29,7 @@ internal class StoriesService : IStoriesService
                 .ToList();
         
         //  Get stories from cache service
-        var items = await _itemsCacheService.GetOrCreateItems(newStories, GetItemById);
+        var items = await ItemsCacheService.GetOrCreateItems(newStories, GetItemById);
 
         //  Order stories list by newest
         items = items.OrderByDescending(x => x.Id).ToList();
@@ -49,10 +40,10 @@ internal class StoriesService : IStoriesService
     public async Task<(List<StoryDto>, int)> Search(string searchString, PaginationFilter paginationFilter)
     {
         //  Get new story ids
-        var newStoriesResponse = await _hackerNewsClient.GetNewStories();
+        var newStoriesResponse = await HackerNewsClient.GetNewStories();
 
         //  Get items from cache service
-        var items = await _itemsCacheService.GetOrCreateItems(newStoriesResponse.Data!, GetItemById);
+        var items = await ItemsCacheService.GetOrCreateItems(newStoriesResponse.Data!, GetItemById);
         
         //  Filter items where title contains the search string
         //  Paginate the result
@@ -64,20 +55,5 @@ internal class StoriesService : IStoriesService
             .ToList();
         
         return new ValueTuple<List<StoryDto>, int>(items, items.Count);
-    }
-
-    /// <summary>
-    ///     Calls GetItemById from HackerNews client and returns the Story if request succeeded.
-    /// </summary>
-    /// <param name="id">The id of the item</param>
-    /// <returns>A nullable StoryDto.</returns>
-    private async Task<StoryDto?> GetItemById(int id)
-    {
-        StoryDto? result = null;
-        
-        var itemResponse = await _hackerNewsClient.GetItemById(id);
-        if (itemResponse.Success) result = _mapper.Map<StoryDto>(itemResponse.Data);
-
-        return result;
     }
 }

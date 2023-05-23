@@ -2,8 +2,6 @@
 using NewsPortal.Backend.Infrastructure.Http.HackerNews.DependencyInjection;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews.Models;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews.Models.Contracts;
-using Newtonsoft.Json;
-using RestSharp;
 
 namespace NewsPortal.Backend.Infrastructure.Http.HackerNews.Client;
 
@@ -27,5 +25,10 @@ internal sealed class HackerNewsClient : BaseHackerNewsClient, IHackerNewsClient
     public async Task<HackerNewsClientResponse<List<int>>> GetNewStories()
     {
         return await Get<List<int>>(Endpoints.Items.NewStories);
+    }
+
+    public async Task<HackerNewsClientResponse<Updates>> GetChangedItemsAndProfiles()
+    {
+        return await Get<Updates>(Endpoints.Updates.GetItemsAndProfileUpdates);
     }
 }
