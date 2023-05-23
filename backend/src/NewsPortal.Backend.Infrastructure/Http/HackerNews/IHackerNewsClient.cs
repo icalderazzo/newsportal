@@ -8,4 +8,5 @@ public interface IHackerNewsClient
     Task<HackerNewsClientResponse<Item>> GetItemById(int itemId);
     Task<HackerNewsClientResponse<List<int>>> GetTopStories();
     Task<HackerNewsClientResponse<List<int>>> GetNewStories();
+    Task<HackerNewsClientResponse<Updates>> GetChangedItemsAndProfiles();
 }
