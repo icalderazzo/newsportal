@@ -24,7 +24,8 @@ internal abstract class BaseItemService<T> : IItemService<T> where T : ItemDto
     public async Task UpdateItems()
     {
         var updatedItems = await HackerNewsClient.GetChangedItemsAndProfiles();
-        await ItemsCacheService.UpdateItems(updatedItems.Data!.Items, GetItemById);
+        if(updatedItems.Data is not null)
+            await ItemsCacheService.UpdateItems(updatedItems.Data.Items, GetItemById);
     }
 
     /// <summary>
