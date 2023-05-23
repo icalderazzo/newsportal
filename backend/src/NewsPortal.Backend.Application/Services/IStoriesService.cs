@@ -3,7 +3,7 @@ using NewsPortal.Backend.Contracts.Filters;
 
 namespace NewsPortal.Backend.Application.Services;
 
-public interface IStoriesService : IItemService
+public interface IStoriesService : IItemService<StoryDto>
 {
     /// <summary>
     ///     Gets the newest stories filtered by pages.

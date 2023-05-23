@@ -5,7 +5,7 @@ using NewsPortal.Backend.Infrastructure.Http.HackerNews;
 
 namespace NewsPortal.Backend.Application.Item;
 
-internal class BaseItemService<T> : IItemService where T : ItemDto
+internal abstract class BaseItemService<T> : IItemService<T> where T : ItemDto
 {
     protected readonly IHackerNewsClient HackerNewsClient;
     protected readonly IItemsCacheService ItemsCacheService;
@@ -23,7 +23,8 @@ internal class BaseItemService<T> : IItemService where T : ItemDto
     
     public async Task UpdateItems()
     {
-        throw new NotImplementedException();
+        var updatedItems = await HackerNewsClient.GetChangedItemsAndProfiles();
+        await ItemsCacheService.UpdateItems(updatedItems.Data!.Items, GetItemById);
     }
 
     /// <summary>
