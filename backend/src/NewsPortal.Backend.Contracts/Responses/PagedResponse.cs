@@ -8,6 +8,11 @@ public class PagedResponse<T> : Response<T>
     public int TotalRecords { get; set; }
     public Uri? PreviousPage { get; set; }
     public Uri? NextPage { get; set; }
+
+    public PagedResponse()
+    {
+        
+    }
     
     public PagedResponse(T data, int pageNumber, int pageSize)
     {

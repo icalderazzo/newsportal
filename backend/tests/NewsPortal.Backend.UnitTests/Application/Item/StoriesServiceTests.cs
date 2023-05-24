@@ -5,6 +5,7 @@ using NewsPortal.Backend.Application.Item.Story;
 using NewsPortal.Backend.Application.Services;
 using NewsPortal.Backend.Contracts.Dtos.Item.Story;
 using NewsPortal.Backend.Contracts.Filters;
+using NewsPortal.Backend.Contracts.Responses;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews.Models;
 using NewsPortal.Backend.UnitTests.Application.Item.MockData;
@@ -30,12 +31,12 @@ public class StoriesServiceTests : BaseItemServiceTestFixture
     {
         //  Arrange
         var itemsCount = HackerNewsData.Items.Count;
-        var expected = new ValueTuple<List<StoryDto>, int>()
+        var expected = new PagedResponse<List<StoryDto>>
         {
-            Item1 = StoriesData.Stories,
-            Item2 = itemsCount
+            Data = StoriesData.Stories,
+            TotalRecords = itemsCount
         };
-        
+
         //  Client mocking
         HackerNewsClient.Setup(c => 
             c.GetNewStories())
@@ -55,8 +56,8 @@ public class StoriesServiceTests : BaseItemServiceTestFixture
         var result = await _storiesService.GetNewestStories();
         
         // Assert
-        Assert.That(expected.Item1, Is.EquivalentTo(result.Item1));
-        Assert.That(expected.Item2, Is.EqualTo(result.Item2));
+        Assert.That(expected.Data, Is.EquivalentTo(result.Data));
+        Assert.That(expected.TotalRecords, Is.EqualTo(result.TotalRecords));
         //  Check if get new stories has been called once
         HackerNewsClient.Verify(c => c.GetNewStories(), Times.Once);
         //  Check if all id's have been passed to GetOrCreateItemsMethod and it has been executed once
@@ -70,10 +71,10 @@ public class StoriesServiceTests : BaseItemServiceTestFixture
     {
         //  Arrange
         var paginationFilter = new PaginationFilter {PageSize = 2, PageNumber = 1};
-        var expected = new ValueTuple<List<StoryDto>, int>()
+        var expected = new PagedResponse<List<StoryDto>>
         {
-            Item1 = StoriesData.Stories.Take(paginationFilter.PageSize).ToList(),
-            Item2 = StoriesData.Stories.Count
+            Data = StoriesData.Stories.Take(paginationFilter.PageSize).ToList(),
+            TotalRecords = StoriesData.Stories.Count
         };
         
         //  Client mocking
@@ -95,8 +96,8 @@ public class StoriesServiceTests : BaseItemServiceTestFixture
         var result = await _storiesService.GetNewestStories(paginationFilter);
         
         // Assert
-        Assert.That(expected.Item1, Is.EquivalentTo(result.Item1));
-        Assert.That(expected.Item2, Is.EqualTo(result.Item2));
+        Assert.That(expected.Data, Is.EquivalentTo(result.Data));
+        Assert.That(expected.TotalRecords, Is.EqualTo(result.TotalRecords));
         //  Check if get new stories has been called once
         HackerNewsClient.Verify(c => c.GetNewStories(), Times.Once);
         //  Check if only the ids matching the page size have been passed to GetOrCreateItemsMethod and it has been executed once
@@ -116,10 +117,10 @@ public class StoriesServiceTests : BaseItemServiceTestFixture
             .Where(x => x.Title.Contains('1', StringComparison.OrdinalIgnoreCase))
             .ToList();
         
-        var expected = new ValueTuple<List<StoryDto>, int>()
+        var expected = new PagedResponse<List<StoryDto>>()
         {
-            Item1 = filteredList,
-            Item2 = filteredList.Count
+            Data = filteredList,
+            TotalRecords = filteredList.Count
         };
         
         //  Client mocking
@@ -141,8 +142,8 @@ public class StoriesServiceTests : BaseItemServiceTestFixture
         var result = await _storiesService.Search("1", defaultPaginationFilter);
         
         // Assert
-        Assert.That(expected.Item1, Is.EquivalentTo(result.Item1));
-        Assert.That(expected.Item2, Is.EqualTo(result.Item2));
+        Assert.That(expected.Data, Is.EquivalentTo(result.Data));
+        Assert.That(expected.TotalRecords, Is.EqualTo(result.TotalRecords));
         //  Check if get new stories has been called once
         HackerNewsClient.Verify(c => c.GetNewStories(), Times.Once);
         //  Check if all id's have been passed to GetOrCreateItemsMethod and it has been executed once
@@ -157,11 +158,11 @@ public class StoriesServiceTests : BaseItemServiceTestFixture
         //  Arrange
         const string searchString = "no coincidences";
         var defaultPaginationFilter = new PaginationFilter();
-        
-        var expected = new ValueTuple<List<StoryDto>, int>()
+
+        var expected = new PagedResponse<List<StoryDto>>
         {
-            Item1 = new List<StoryDto>(),
-            Item2 = 0
+            Data = new List<StoryDto>(),
+            TotalRecords = 0
         };
         
         //  Client mocking
@@ -183,8 +184,8 @@ public class StoriesServiceTests : BaseItemServiceTestFixture
         var result = await _storiesService.Search(searchString, defaultPaginationFilter);
         
         // Assert
-        Assert.That(expected.Item1, Is.EquivalentTo(result.Item1));
-        Assert.That(expected.Item2, Is.EqualTo(result.Item2));
+        Assert.That(expected.Data, Is.EquivalentTo(result.Data));
+        Assert.That(expected.TotalRecords, Is.EqualTo(result.TotalRecords));
         //  Check if get new stories has been called once
         HackerNewsClient.Verify(c => c.GetNewStories(), Times.Once);
         //  Check if all id's have been passed to GetOrCreateItemsMethod and it has been executed once

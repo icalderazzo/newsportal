@@ -3,6 +3,7 @@ using AutoMapper;
 using NewsPortal.Backend.Application.Services;
 using NewsPortal.Backend.Contracts.Dtos.Item.Story;
 using NewsPortal.Backend.Contracts.Filters;
+using NewsPortal.Backend.Contracts.Responses;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews;
 
 [assembly: InternalsVisibleTo("NewsPortal.Backend.UnitTests")]
@@ -17,7 +18,7 @@ internal class StoriesService : BaseItemService<StoryDto>, IStoriesService
     {
     }
 
-    public async Task<(List<StoryDto>, int)> GetNewestStories(PaginationFilter? paginationFilter = null)
+    public async Task<PagedResponse<List<StoryDto>>> GetNewestStories(PaginationFilter? paginationFilter = null)
     {
         //  Get new story ids
         var newStoriesResponse = await HackerNewsClient.GetNewStories();
@@ -35,11 +36,15 @@ internal class StoriesService : BaseItemService<StoryDto>, IStoriesService
 
         //  Order stories list by newest
         items = items.OrderByDescending(x => x.Id).ToList();
-        
-        return new ValueTuple<List<StoryDto>, int>(items, newStoriesResponse.Data!.Count);
+
+        return new PagedResponse<List<StoryDto>>
+        {
+            Data = items,
+            TotalRecords = newStoriesResponse.Data!.Count
+        };
     }
 
-    public async Task<(List<StoryDto>, int)> Search(string searchString, PaginationFilter paginationFilter)
+    public async Task<PagedResponse<List<StoryDto>>> Search(string searchString, PaginationFilter paginationFilter)
     {
         //  Get new story ids
         var newStoriesResponse = await HackerNewsClient.GetNewStories();
@@ -48,14 +53,19 @@ internal class StoriesService : BaseItemService<StoryDto>, IStoriesService
         var items = await ItemsCacheService.GetOrCreateItems(newStoriesResponse.Data!, GetItemById);
         
         //  Filter items where title contains the search string
-        //  Paginate the result
-        items = items
-            .Where(i => i.Title.ToLower().Trim().Contains(searchString.Trim().ToLower()))
-            .OrderByDescending(i => i.Id)
-            .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
-            .Take(paginationFilter.PageSize)
+        var filteredItems = items
+            .Where(i => i.Title.Trim().Contains(searchString.Trim(), StringComparison.OrdinalIgnoreCase))
             .ToList();
-        
-        return new ValueTuple<List<StoryDto>, int>(items, items.Count);
+
+        //  Build and return the paginated response
+        return new PagedResponse<List<StoryDto>>()
+        {
+            Data = filteredItems
+                .OrderByDescending(i => i.Id)
+                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+                .Take(paginationFilter.PageSize)
+                .ToList(),
+            TotalRecords = filteredItems.Count
+        };
     }
 }

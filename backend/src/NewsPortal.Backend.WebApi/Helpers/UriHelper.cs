@@ -2,7 +2,7 @@
 
 public static class UriHelper
 {
-    public static Uri GetRequestBaseUri(HttpRequest req)
+    public static Uri GetRequestBaseUri(this HttpRequest req)
     {
         var builder = new UriBuilder()
         {

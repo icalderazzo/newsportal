@@ -33,23 +33,18 @@ public class ItemController : ControllerBase
     {
         try
         {
-            ValueTuple<List<StoryDto>, int> storiesResult;
+            PagedResponse<List<StoryDto>>? response;
+            
             if (string.IsNullOrEmpty(searchString))
             {
-                storiesResult = await _storiesService.GetNewestStories(paginationFilter);
+                response = await _storiesService.GetNewestStories(paginationFilter);
             }
             else
             {
-                storiesResult = await _storiesService.Search(searchString, paginationFilter);
+                response = await _storiesService.Search(searchString, paginationFilter);
             }
             
-            var response = PaginationHelper.CreatePagedResponse(
-                storiesResult.Item1, 
-                paginationFilter, 
-                storiesResult.Item2, 
-                UriHelper.GetRequestBaseUri(Request),
-                searchString);
-            
+            response.FillPagedResponseData(paginationFilter, Request.GetRequestBaseUri(), searchString);
             return Ok(response);
         }
         catch (Exception)
