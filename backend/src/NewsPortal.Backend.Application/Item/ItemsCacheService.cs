@@ -18,7 +18,7 @@ public class ItemsCacheService : IItemsCacheService
         IEnumerable<int> itemIds, Func<int, Task<T?>> createItemFunc) where T : ItemDto
     { 
         //  Items concurrent collection
-        var items = new ConcurrentQueue<T>();
+        var items = new ConcurrentBag<T>();
 
         //  Execute get or create async in parallel 
         await Parallel.ForEachAsync(itemIds ,async(itemId, cancellationToken) =>
@@ -43,11 +43,10 @@ public class ItemsCacheService : IItemsCacheService
                 });
         
             //  Add item to the queue
-            if (item is not null && item.Id > 0) items.Enqueue(item);
+            if (item is not null && item.Id > 0) items.Add(item);
         });
     
         return items.ToList();
-        
     }
 
     public async Task UpdateItems<T>(
