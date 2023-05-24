@@ -37,9 +37,9 @@ Within the Contracts project, the API contract outlines the expected response fo
 ### Frontend
 The frontend project is a basic Angular application using the template provided by the `ng new` command. The structure inside the app folder is the following:
 
-* ```Core```: This folder houses all the interfaces and services responsible for communication with external APIs.
-* ```Stories```: This is the stories module which contains all the components of the stories feed: storycard, table, paginator, searchbar. Each module will have its own separate folder.
-* ```AppModule```: This module represents the heart of the application, handling the feed functionality.
+* `Core`: This folder houses all the interfaces and services responsible for communication with external APIs.
+* `Stories`: This is the stories module which contains all the components of the stories feed: storycard, table, paginator, searchbar. Each module will have its own separate folder.
+* `AppModule`: This module represents the heart of the application, handling the feed functionality.
 
 In addition to the default template, an extra folder named environments has been added. It serves to define environment configurations, including API routes, keys, and other relevant settings. Besides, the angular.json has been modified to replace the environment files according to selected configuration to start the app. 
 
@@ -48,5 +48,24 @@ In addition to the default template, an extra folder named environments has been
 ## Server-side caching
 The solution leverages memory caching through the `IMemoryCache` interface offered by the .NET Core Framework. It employs a caching strategy where the 500 most recent stories are stored in memory for a duration of 10 minutes.
 
-When a new request is made to fetch the latest stories from the API, the solution interacts with the Hacker News API to retrieve the IDs of the 500 newest stories. It then proceeds to either fetch the corresponding items from the cache or call the **v0/item/{id}** endpoint of the Hacker News API to create and store the respective "new" objects in the cache.
+When a new request is made to fetch the latest stories from the API, the solution interacts with the Hacker News API to retrieve the IDs of the 500 newest stories. It then proceeds to either fetch the corresponding items from the cache or call the **/v0/item/{id}** endpoint of the Hacker News API to create and store the respective "new" objects in the cache.
 
+### Implementation
+**ItemsCacheService**: The application service that takes charge of cache management. It utilizes generics to support various types of items, such as Stories, Polls, Comments, and more. While currently focusing on storing Stories, the class is designed with future extensibility in mind, allowing for the potential inclusion of additional item types in the cache.
+
+**StoriesService**: This is the only type of ItemService that required implementation for this solution. Any ItemService will have to relay on the ItemsCacheService and the HackerNewsClient. This class has two methods: `GetNewestStories` and `Search`. Both methods interact with the ItemsCacheService by sending a message to retrieve existing Stories from the cache.
+In the case of the `GetNewestStories` method, the service also defines a Delegate, which enables the ItemsCacheService to create a new Story object if it is not present in the cache. By doing so, the class adheres to the Single Responsibility Principle (SRP), ensuring a clear separation of concerns.
+
+<hr>
+
+Let's move on to discussing the **Background services** within the solution. These services have the responsibility of loading the cache during application startup and updating stories. They implement the `IHostedService` interface, which defines two methods: StartAsync and StopAsync.
+
+StartAsync: Contains the logic to start a background task and it's executed on application starup.
+
+StopAsync: Contains the logic to end a background task.
+
+By implementing the IHostedService interface and utilizing these two methods, the Background services ensure the seamless initialization and termination of background tasks, contributing to the overall functionality and reliability of the solution.
+
+**NewestStoriesBackgroundService**: This service utilizes the `IServiceProvider` to create a new scope and retrieve an instance of the StoriesService. It then calls the `GetNewestStories` method from the StoriesServic to the cache is loaded during the application startup. To ensure that the service performs its work only once, it includes a flag that indicates whether the task has been completed or not. This allows the service to avoid redundant processing if it has already fulfilled its purpose.
+
+**UpdateStoriesBackgroundService**: Similar to the previous service, it utilizes the `IServiceProvider` and creates a new scope to obtain an instance of the StoriesService. In this case, the service invokes a method from the base class, ItemService, called `UpdateItems`. Inside this method, the service makes a request to the Hacker News API endpoint **/v0/updates** to retrieve the latest updates. Then, it then interacts with the ItemsCacheService to remove outdated instances of stories and create new ones based on the updated data.  
