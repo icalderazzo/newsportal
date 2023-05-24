@@ -1,9 +1,11 @@
-﻿using AutoMapper;
+﻿using System.Runtime.CompilerServices;
+using AutoMapper;
 using NewsPortal.Backend.Application.Services;
 using NewsPortal.Backend.Contracts.Dtos.Item.Story;
 using NewsPortal.Backend.Contracts.Filters;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews;
 
+[assembly: InternalsVisibleTo("NewsPortal.Backend.UnitTests")]
 namespace NewsPortal.Backend.Application.Item.Story;
 
 internal class StoriesService : BaseItemService<StoryDto>, IStoriesService 
