@@ -9,7 +9,7 @@ public interface IStoriesService : IItemService<StoryDto>
     /// <summary>
     ///     Gets the newest stories filtered by pages.
     /// </summary>
-    /// <param name="paginationFilter">The pagination filter.</param>
+    /// <param name="paginationFilter">The pagination filter. This is optional in order to allow getting all stories at once.</param>
     /// <returns>A PagedResponse of StoryDtos containing the filtered data and the total record count.</returns>
     Task<PagedResponse<List<StoryDto>>> GetNewestStories(PaginationFilter? paginationFilter = null);
 
