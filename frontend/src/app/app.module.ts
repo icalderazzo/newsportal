@@ -10,7 +10,7 @@ import { HttpClientModule } from '@angular/common/http'
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { NewsModule } from './news/news.module';
+import { StoriesModule } from './stories/stories.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +24,7 @@ import { NewsModule } from './news/news.module';
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    NewsModule
+    StoriesModule
   ],
   providers: [],
   bootstrap: [AppComponent]

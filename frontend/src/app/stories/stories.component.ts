@@ -2,14 +2,13 @@ import { Component, Input, OnInit } from '@angular/core';
 import { News } from '../core/models/newsportal/news';
 import { NewsPortalPagedResponse } from '../core/models/newsportal/newsPortalPagedResponse';
 import { NewsportalService } from '../core/services/newsportal.service';
-import { switchMap } from 'rxjs';
 
 @Component({
-  selector: 'app-news',
-  templateUrl: './news.component.html',
-  styleUrls: ['./news.component.css']
+  selector: 'app-stories',
+  templateUrl: './stories.component.html',
+  styleUrls: ['./stories.component.css']
 })
-export class NewsComponent implements OnInit {
+export class StoriesComponent implements OnInit {
   
   constructor(private newsPortalService: NewsportalService) {}
   

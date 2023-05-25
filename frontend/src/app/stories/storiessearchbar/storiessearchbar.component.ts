@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
-  selector: 'news-searchbar',
-  templateUrl: './newssearchbar.component.html'
+  selector: 'stories-searchbar',
+  templateUrl: './storiessearchbar.component.html'
 })
-export class NewssearchbarComponent {
+export class StoriessearchbarComponent {
   @Output() searchNewsEvent = new EventEmitter<string>();
 
   searchString: string | undefined;
