@@ -1,0 +1,15 @@
+<div class="news-box">
+    <div *ngIf="showSearchBar">
+        <stories-searchbar (searchNewsEvent)="search($event)" />
+    </div>
+
+    <div>
+        <h1>Latests stories!</h1>
+    </div>
+    
+    <mat-divider/>
+
+    <stories-table [loading]="loading" [news]="currentNews" />
+    
+    <stories-paginator [length]="totalNewsCount" (changePageEvent)="changePage($event)" />
+</div>

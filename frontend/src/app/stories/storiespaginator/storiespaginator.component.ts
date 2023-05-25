@@ -2,10 +2,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
-  selector: 'news-paginator',
-  templateUrl: './newspaginator.component.html'
+  selector: 'stories-paginator',
+  templateUrl: './storiespaginator.component.html'
 })
-export class NewspaginatorComponent {
+export class StoriespaginatorComponent {
   /**
    * Total items number.
    */

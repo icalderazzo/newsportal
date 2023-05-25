@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'news-card',
-  templateUrl: './newscard.component.html'
+  selector: 'story-card',
+  templateUrl: './storycard.component.html'
 })
-export class NewscardComponent {
+export class StorycardComponent {
   @Input() title: string | undefined;
   @Input() text: string | undefined;
   @Input() url: string | undefined;
