@@ -71,5 +71,12 @@ By implementing the IHostedService interface and utilizing these two methods, th
 **UpdateStoriesBackgroundService**: Similar to the previous service, it utilizes the `IServiceProvider` and creates a new scope to obtain an instance of the StoriesService. In this case, the service invokes a method from the base class, ItemService, called `UpdateItems`. Inside this method, the service makes a request to the Hacker News API endpoint **/v0/updates** to retrieve the latest updates. Then, it then interacts with the ItemsCacheService to remove outdated instances of stories and create new ones based on the updated data.
 
 ## Run the application locally
+1. In the backend folder, open the `NewsPortal.Backend.sln` with your IDE of preference.
+2. Make sure the `NewsPortal.Backend.WebApi` is selected as startup project and you have selcted `NewsPortal.Backend.WebApi` profile before running the application.
+3. The application should start running in **https:localhost:7105** and you will be prompted with a new browser window in a Swagger UI.
+4. Open a Terminal and go the ../frontend folder.
+5. Execure the following command to install dependencies `npm i`.
+6. Excecute the following command `ng serve -o`.
+7. The Angular app should start running in **https:localhost:4200**. A new browser window should pop-up with the web running.    
 
 ## Development time
