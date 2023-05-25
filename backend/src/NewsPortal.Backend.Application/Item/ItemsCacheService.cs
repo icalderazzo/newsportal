@@ -1,11 +1,13 @@
 ﻿using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Caching.Memory;
 using NewsPortal.Backend.Application.Services;
 using NewsPortal.Backend.Contracts.Dtos.Item;
 
+[assembly: InternalsVisibleTo("NewsPortal.Backend.UnitTests")]
 namespace NewsPortal.Backend.Application.Item;
 
-public class ItemsCacheService : IItemsCacheService
+internal class ItemsCacheService : IItemsCacheService
 {
     private readonly IMemoryCache _memoryCache;
     
@@ -37,8 +39,8 @@ public class ItemsCacheService : IItemsCacheService
                         return createItemResult;
                     }
                 
-                    //  Add an empty object with zero life time if request failed
-                    entry.AbsoluteExpirationRelativeToNow = TimeSpan.Zero;
+                    //  Add an empty object with 1 millisecond life time if create item failed
+                    entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMilliseconds(1);
                     return default!;
                 });
         
