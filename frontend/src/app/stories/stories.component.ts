@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { News } from '../core/models/newsportal/news';
 import { NewsPortalPagedResponse } from '../core/models/newsportal/newsPortalPagedResponse';
 import { NewsportalService } from '../core/services/newsportal.service';
+import { StoriespaginatorComponent } from './storiespaginator/storiespaginator.component';
 
 @Component({
   selector: 'app-stories',
@@ -13,6 +14,8 @@ export class StoriesComponent implements OnInit {
   constructor(private newsPortalService: NewsportalService) {}
   
   @Input() showSearchBar : boolean | undefined;
+
+  @ViewChild(StoriespaginatorComponent) paginator: StoriespaginatorComponent | undefined;
 
   newsResponse: NewsPortalPagedResponse<News[]> | undefined;  
   currentNews: News[] | undefined;
@@ -49,6 +52,7 @@ export class StoriesComponent implements OnInit {
   
   search($event: any) {
     this.searchString = $event;
+    this.paginator!.pageIndex = 0;
     this.loadNews();
   }
 }

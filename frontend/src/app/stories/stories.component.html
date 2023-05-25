@@ -11,5 +11,5 @@
 
     <stories-table [loading]="loading" [news]="currentNews" />
     
-    <stories-paginator [length]="totalNewsCount" (changePageEvent)="changePage($event)" />
+    <stories-paginator #paginator [length]="totalNewsCount" (changePageEvent)="changePage($event)" />
 </div>
