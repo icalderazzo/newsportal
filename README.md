@@ -80,3 +80,17 @@ By implementing the IHostedService interface and utilizing these two methods, th
 7. The Angular app should start running in **https:localhost:4200**. A new browser window should pop-up with the web running.    
 
 ## Development time
+Here's a detail on how much time I spent on working on each activiy:
+
+- *__Repo+env setup+solution structure__*: 0.5 hrs.
+- *__Read & Understand HackerNews Documentation__*: 0.5 hrs.
+- *__HackerNews http client implementation & tests__*: 1 hrs.
+- *__.NET Caching investigation__*: 1 hrs.
+- *__.NET Caching implementation__*: 2.5 hrs.
+- *__UI Components development__*: 3 hrs.
+- *__WebApp Interfaces & Services__*: 0.5 hrs.
+- *__Pagination implementation__*: 1 hrs.
+- *__Search feature implementation__*: 1.5 hrs.
+- *__Testing & Bug Fixing__*: 2 hrs.
+- *__Documentation__*: 2 hrs.
+
