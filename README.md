@@ -13,7 +13,7 @@ The primary objective of this endeavor is to demonstrate my development skills i
 * Server Caching of the newest stories
 
 ## Assumptions
-* Stories shown in the feed are retrieved from the **/v0/newstories** endpoint
+* Stories shown in the feed are retrieved from the **/v0/newstories** endpoint (500 newest stories)
 * The stories that do not have a hyperlink will not have a button to redirect to original source, but they will show a title and a text if they have
 * Some AskHN posts come with the newstories endpoint, they will not be filtered.
 
@@ -68,4 +68,8 @@ By implementing the IHostedService interface and utilizing these two methods, th
 
 **NewestStoriesBackgroundService**: This service utilizes the `IServiceProvider` to create a new scope and retrieve an instance of the StoriesService. It then calls the `GetNewestStories` method from the StoriesServic to the cache is loaded during the application startup. To ensure that the service performs its work only once, it includes a flag that indicates whether the task has been completed or not. This allows the service to avoid redundant processing if it has already fulfilled its purpose.
 
-**UpdateStoriesBackgroundService**: Similar to the previous service, it utilizes the `IServiceProvider` and creates a new scope to obtain an instance of the StoriesService. In this case, the service invokes a method from the base class, ItemService, called `UpdateItems`. Inside this method, the service makes a request to the Hacker News API endpoint **/v0/updates** to retrieve the latest updates. Then, it then interacts with the ItemsCacheService to remove outdated instances of stories and create new ones based on the updated data.  
+**UpdateStoriesBackgroundService**: Similar to the previous service, it utilizes the `IServiceProvider` and creates a new scope to obtain an instance of the StoriesService. In this case, the service invokes a method from the base class, ItemService, called `UpdateItems`. Inside this method, the service makes a request to the Hacker News API endpoint **/v0/updates** to retrieve the latest updates. Then, it then interacts with the ItemsCacheService to remove outdated instances of stories and create new ones based on the updated data.
+
+## Run the application locally
+
+## Development time
