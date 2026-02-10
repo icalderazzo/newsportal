@@ -2,6 +2,6 @@
 
 public class HackerNewsOptions
 {
-    public string BaseUrl { get; set; }
+    public required string BaseUrl { get; set; }
     public int Version { get; set; }
 }

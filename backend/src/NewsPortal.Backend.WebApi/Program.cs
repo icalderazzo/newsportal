@@ -1,4 +1,4 @@
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using NewsPortal.Backend.Application;
 using NewsPortal.Backend.Infrastructure;
 
@@ -17,11 +17,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddMemoryCache();
 builder.Services.AddApplicationServices();
-builder.Services.AddInfrastructureServices(conf =>
-{
-    conf.BaseUrl = builder.Configuration["Apis:HackerNews:BaseUrl"];
-    conf.Version = builder.Configuration.GetValue<int>("Apis:HackerNews:Version");
-});
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 var app = builder.Build();
 

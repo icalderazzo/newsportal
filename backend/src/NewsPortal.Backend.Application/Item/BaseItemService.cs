@@ -1,4 +1,3 @@
-using AutoMapper;
 using NewsPortal.Backend.Application.Services;
 using NewsPortal.Backend.Contracts.Dtos.Item;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews;
@@ -9,12 +8,12 @@ internal abstract class BaseItemService<T> : IItemService<T> where T : ItemDto
 {
     protected readonly IHackerNewsClient HackerNewsClient;
     protected readonly IItemsCacheService ItemsCacheService;
-    protected readonly IMapper Mapper;
+    protected readonly ItemMapper Mapper;
     
     protected BaseItemService(
         IHackerNewsClient hackerNewsClient, 
         IItemsCacheService itemsCacheService, 
-        IMapper mapper)
+        ItemMapper mapper)
     {
         HackerNewsClient = hackerNewsClient;
         ItemsCacheService = itemsCacheService;
@@ -38,7 +37,8 @@ internal abstract class BaseItemService<T> : IItemService<T> where T : ItemDto
         T? result = null;
         
         var itemResponse = await HackerNewsClient.GetItemById(itemId);
-        if (itemResponse.Success) result = Mapper.Map<T>(itemResponse.Data);
+        if (itemResponse.Success && itemResponse.Data != null) 
+            result = Mapper.MapToItemDto<T>(itemResponse.Data);
 
         return result;
     }

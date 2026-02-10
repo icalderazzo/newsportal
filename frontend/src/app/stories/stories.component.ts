@@ -5,9 +5,10 @@ import { NewsportalService } from '../core/services/newsportal.service';
 import { StoriespaginatorComponent } from './storiespaginator/storiespaginator.component';
 
 @Component({
-  selector: 'app-stories',
-  templateUrl: './stories.component.html',
-  styleUrls: ['./stories.component.css']
+    selector: 'app-stories',
+    templateUrl: './stories.component.html',
+    styleUrls: ['./stories.component.css'],
+    standalone: false
 })
 export class StoriesComponent implements OnInit {
   

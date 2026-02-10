@@ -2,8 +2,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
-  selector: 'stories-paginator',
-  templateUrl: './storiespaginator.component.html'
+    selector: 'stories-paginator',
+    templateUrl: './storiespaginator.component.html',
+    standalone: false
 })
 export class StoriespaginatorComponent {
   /**

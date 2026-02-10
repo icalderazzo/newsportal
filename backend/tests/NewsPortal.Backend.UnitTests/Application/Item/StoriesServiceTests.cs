@@ -1,5 +1,4 @@
 using System.Net;
-using AutoMapper;
 using Moq;
 using NewsPortal.Backend.Application.Item.Story;
 using NewsPortal.Backend.Application.Services;

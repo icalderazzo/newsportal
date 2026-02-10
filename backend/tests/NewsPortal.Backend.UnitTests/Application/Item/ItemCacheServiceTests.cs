@@ -1,4 +1,3 @@
-
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using NewsPortal.Backend.Application.Item;
@@ -82,5 +81,11 @@ public class ItemCacheServiceTests
         //  Assert
         //  Check if stories 6 and 5 were not created and service returned result is the initial 4 stories
         Assert.That(result, Has.Count.EqualTo(expectedItemCount));
+    }
+    
+    [TearDown]
+    public void TearDown()
+    {
+        (_serviceProvider as IDisposable)?.Dispose();
     }
 }

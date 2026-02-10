@@ -2,8 +2,9 @@ import { Component, Input } from '@angular/core';
 import { News } from 'src/app/core/models/newsportal/news';
 
 @Component({
-  selector: 'stories-table',
-  templateUrl: './storiestable.component.html'
+    selector: 'stories-table',
+    templateUrl: './storiestable.component.html',
+    standalone: false
 })
 export class StoriestableComponent {
   @Input() loading: boolean | undefined;
