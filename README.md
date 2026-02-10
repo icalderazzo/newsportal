@@ -3,8 +3,8 @@
 This is a small project that showcases the integration of a Web API and Single Page Application (SPA) to provide users with a seamless experience accessing the newest stories. The stories presented in the feed are retrieved from the Hacker News API: https://github.com/HackerNews/API
 
 The development of this project revolves around two core technologies:
-* Back-end: .NET 6 with C#11
-* Front-end: Angular 16.0.1
+* Back-end: .NET 10 with C#15
+* Front-end: Angular 21.0
 
 The primary objective of this endeavor is to demonstrate my development skills in both frameworks, incorporating essential modern application features, such as:
 
@@ -31,7 +31,7 @@ The API consits in three layers:
 The solution includes a `Contracts` project that defines the API contract, specifying the response structure and Data Transfer Objects (DTOs).
 Within the Contracts project, the API contract outlines the expected response format, enabling API consumers to understand the data they will receive. The WebApi project does not include the API contract definition because it is required by the Application Layer for mapping purposes. Additionally, if a .NET HttpClient needs to be created for this API, it only needs to rely on the Contracts project.
 
-**Dependencies:** RestSharp/110.2.0, Newtonsoft/13.0.3, AutoMapper/12.0.1
+**Dependencies:** RestSharp/113.1.0, Newtonsoft/13.0.4, Riok.Mapperly/4.3.0
 
 
 ### Frontend
@@ -43,7 +43,7 @@ The frontend project is a basic Angular application using the template provided 
 
 In addition to the default template, an extra folder named environments has been added. It serves to define environment configurations, including API routes, keys, and other relevant settings. Besides, the angular.json has been modified to replace the environment files according to selected configuration to start the app. 
 
-**Dependencies:** Angular Material/16.0.1
+**Dependencies:** Angular Material/21.0
 
 ## Server-side caching
 The solution leverages memory caching through the `IMemoryCache` interface offered by the .NET Core Framework. It employs a caching strategy where the 500 most recent stories are stored in memory for a duration of 10 minutes.
@@ -73,24 +73,8 @@ By implementing the IHostedService interface and utilizing these two methods, th
 ## Run the application locally
 1. In the backend folder, open the `NewsPortal.Backend.sln` with your IDE of preference.
 2. Make sure the `NewsPortal.Backend.WebApi` is selected as startup project and you have selcted `NewsPortal.Backend.WebApi` profile before running the application.
-3. The application should start running in **https:localhost:7105** and you will be prompted with a new browser window in a Swagger UI.
+3. The application should start running in **https:localhost:7105** and you will be prompted with a new browser window in a Swagger UI - you may need to trust local dotnet certs on your system.
 4. Open a Terminal and go the ../frontend folder.
 5. Execure the following command to install dependencies `npm i`.
 6. Excecute the following command `ng serve -o`.
-7. The Angular app should start running in **https:localhost:4200**. A new browser window should pop-up with the web running.    
-
-## Development time
-Here's a detail on how much time I spent on working on each activiy:
-
-- *__Repo+env setup+solution structure__*: 0.5 hrs.
-- *__Read & Understand HackerNews Documentation__*: 0.5 hrs.
-- *__HackerNews http client implementation & tests__*: 1 hrs.
-- *__.NET Caching investigation__*: 1 hrs.
-- *__.NET Caching implementation__*: 2.5 hrs.
-- *__UI Components development__*: 3 hrs.
-- *__WebApp Interfaces & Services__*: 0.5 hrs.
-- *__Pagination implementation__*: 1 hrs.
-- *__Search feature implementation__*: 1.5 hrs.
-- *__Testing & Bug Fixing__*: 2 hrs.
-- *__Documentation__*: 2 hrs.
-
+7. The Angular app should start running in **https:localhost:4200**. A new browser window should pop-up with the web running.
