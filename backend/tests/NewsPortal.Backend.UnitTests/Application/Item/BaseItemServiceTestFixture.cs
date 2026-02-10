@@ -17,6 +17,6 @@ public abstract class BaseItemServiceTestFixture
         Mapper = new Mapper(new MapperConfiguration(cfg =>
         {
             cfg.CreateMap<Infrastructure.Http.HackerNews.Models.Contracts.Item, StoryDto>();
-        }));
+        }, null));
     }
 }

@@ -21,6 +21,6 @@ public static class ConfigureServices
         services.AddScoped<IStoriesService, StoriesService>();
 
         //  AutoMapper
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        services.AddAutoMapper(_ => { }, Assembly.GetExecutingAssembly());
     }
 }
