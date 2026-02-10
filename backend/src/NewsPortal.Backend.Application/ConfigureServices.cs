@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
+﻿﻿using Microsoft.Extensions.DependencyInjection;
 using NewsPortal.Backend.Application.BackgroundServices;
 using NewsPortal.Backend.Application.Item;
 using NewsPortal.Backend.Application.Item.Story;
@@ -20,7 +19,7 @@ public static class ConfigureServices
         services.AddScoped<IItemService<StoryDto>, StoriesService>();
         services.AddScoped<IStoriesService, StoriesService>();
 
-        //  AutoMapper
-        services.AddAutoMapper(_ => { }, Assembly.GetExecutingAssembly());
+        //  Mapperly Mapper
+        services.AddSingleton<ItemMapper>();
     }
 }

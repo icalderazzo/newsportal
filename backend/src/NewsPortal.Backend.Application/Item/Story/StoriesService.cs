@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using AutoMapper;
+﻿﻿using System.Runtime.CompilerServices;
 using NewsPortal.Backend.Application.Services;
 using NewsPortal.Backend.Contracts.Dtos.Item.Story;
 using NewsPortal.Backend.Contracts.Filters;
@@ -14,7 +13,7 @@ internal class StoriesService : BaseItemService<StoryDto>, IStoriesService
     public StoriesService(
         IHackerNewsClient hackerNewsClient,  
         IItemsCacheService itemsCacheService,
-        IMapper mapper) : base(hackerNewsClient, itemsCacheService, mapper)
+        ItemMapper mapper) : base(hackerNewsClient, itemsCacheService, mapper)
     {
     }
 

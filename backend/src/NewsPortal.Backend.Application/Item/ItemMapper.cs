@@ -1,12 +1,21 @@
-﻿using AutoMapper;
+﻿using Riok.Mapperly.Abstractions;
 using NewsPortal.Backend.Contracts.Dtos.Item.Story;
 
 namespace NewsPortal.Backend.Application.Item;
 
-internal class ItemMapper : Profile
+[Mapper]
+public partial class ItemMapper
 {
-    public ItemMapper()
-    {
-        CreateMap<Infrastructure.Http.HackerNews.Models.Contracts.Item, StoryDto>();
-    }
+    public partial T MapToItemDto<T>(Infrastructure.Http.HackerNews.Models.Contracts.Item item);
+    
+    [MapperIgnoreSource(nameof(Infrastructure.Http.HackerNews.Models.Contracts.Item.Deleted))]
+    [MapperIgnoreSource(nameof(Infrastructure.Http.HackerNews.Models.Contracts.Item.By))]
+    [MapperIgnoreSource(nameof(Infrastructure.Http.HackerNews.Models.Contracts.Item.Dead))]
+    [MapperIgnoreSource(nameof(Infrastructure.Http.HackerNews.Models.Contracts.Item.Parent))]
+    [MapperIgnoreSource(nameof(Infrastructure.Http.HackerNews.Models.Contracts.Item.Poll))]
+    [MapperIgnoreSource(nameof(Infrastructure.Http.HackerNews.Models.Contracts.Item.Kids))]
+    [MapperIgnoreSource(nameof(Infrastructure.Http.HackerNews.Models.Contracts.Item.Score))]
+    [MapperIgnoreSource(nameof(Infrastructure.Http.HackerNews.Models.Contracts.Item.Parts))]
+    [MapperIgnoreSource(nameof(Infrastructure.Http.HackerNews.Models.Contracts.Item.Descendants))]
+    private partial StoryDto MapToStoryDto(Infrastructure.Http.HackerNews.Models.Contracts.Item item);
 }
