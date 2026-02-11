@@ -1,11 +1,12 @@
-﻿using Riok.Mapperly.Abstractions;
-using NewsPortal.Backend.Contracts.Dtos.Item.Story;
+﻿using NewsPortal.Backend.Contracts.Dtos.Item;
+using Riok.Mapperly.Abstractions;
 
 namespace NewsPortal.Backend.Application.Item;
 
 [Mapper]
 public partial class ItemMapper
 {
+    // HackerNewsApi to DTO
     public partial T MapToItemDto<T>(Infrastructure.Http.HackerNews.Models.Contracts.Item item);
     
     [MapperIgnoreSource(nameof(Infrastructure.Http.HackerNews.Models.Contracts.Item.Deleted))]
@@ -18,4 +19,9 @@ public partial class ItemMapper
     [MapperIgnoreSource(nameof(Infrastructure.Http.HackerNews.Models.Contracts.Item.Parts))]
     [MapperIgnoreSource(nameof(Infrastructure.Http.HackerNews.Models.Contracts.Item.Descendants))]
     private partial StoryDto MapToStoryDto(Infrastructure.Http.HackerNews.Models.Contracts.Item item);
+    
+    // DTO to Domain
+    public partial T MapToDomainItem<T>(ItemDto itemDto);
+    
+    private partial Domain.Models.Items.Story MapToDomainItem(ItemDto itemDto);
 }

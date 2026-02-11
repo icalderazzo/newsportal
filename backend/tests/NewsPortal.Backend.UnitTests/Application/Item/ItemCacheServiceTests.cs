@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using NewsPortal.Backend.Application.Item;
-using NewsPortal.Backend.Contracts.Dtos.Item.Story;
+using NewsPortal.Backend.Contracts.Dtos.Item;
 using NewsPortal.Backend.UnitTests.Application.Item.MockData;
 
 namespace NewsPortal.Backend.UnitTests.Application.Item;

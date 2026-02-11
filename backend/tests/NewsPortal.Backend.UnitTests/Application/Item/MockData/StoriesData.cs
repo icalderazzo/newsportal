@@ -1,4 +1,4 @@
-using NewsPortal.Backend.Contracts.Dtos.Item.Story;
+using NewsPortal.Backend.Contracts.Dtos.Item;
 
 namespace NewsPortal.Backend.UnitTests.Application.Item.MockData;
 

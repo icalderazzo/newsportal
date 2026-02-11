@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using NewsPortal.Backend.Application.Services;
-using NewsPortal.Backend.Contracts.Dtos.Item.Story;
+using NewsPortal.Backend.Contracts.Dtos.Item;
 using NewsPortal.Backend.Contracts.Filters;
 using NewsPortal.Backend.Contracts.Responses;
 using NewsPortal.Backend.WebApi.Helpers;
@@ -9,11 +9,12 @@ using NewsPortal.Backend.WebApi.Helpers;
 namespace NewsPortal.Backend.WebApi.Controllers;
 
 [ApiController]
-public class ItemController : ControllerBase
+[Route("stories")]
+public class StoriesController : ControllerBase
 {
     private readonly IStoriesService _storiesService;
     
-    public ItemController(IStoriesService storiesService)
+    public StoriesController(IStoriesService storiesService)
     {
         _storiesService = storiesService;
     }
@@ -24,12 +25,10 @@ public class ItemController : ControllerBase
     /// <param name="paginationFilter"></param>
     /// <param name="searchString"></param>
     /// <returns></returns>
-    [HttpGet("stories")]
+    [HttpGet]
     [ProducesResponseType(typeof(PagedResponse<List<StoryDto>>), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.InternalServerError)]
-    public async Task<IActionResult> GetStories(
-        [FromQuery] PaginationFilter paginationFilter,
-        [FromQuery] string? searchString = null)
+    public async Task<IActionResult> GetStories([FromQuery] PaginationFilter paginationFilter, [FromQuery] string? searchString = null)
     {
         try
         {
@@ -46,6 +45,27 @@ public class ItemController : ControllerBase
             
             response.FillPagedResponseData(paginationFilter, Request.GetRequestBaseUri(), searchString);
             return Ok(response);
+        }
+        catch (Exception)
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError);
+        }
+    }
+
+    /// <summary>
+    ///     Bookmarks story for the logged user
+    /// </summary>
+    /// <param name="storyId"></param>
+    /// <returns></returns>
+    [HttpPost("{storyId:int}/bookmark")]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.InternalServerError)]
+    public async Task<IActionResult> BookmarkStory(int storyId)
+    {
+        try
+        {
+            await _storiesService.BookmarkItem(storyId);
+            return Ok();
         }
         catch (Exception)
         {

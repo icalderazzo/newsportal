@@ -2,9 +2,10 @@ using System.Net;
 using Moq;
 using NewsPortal.Backend.Application.Item.Story;
 using NewsPortal.Backend.Application.Services;
-using NewsPortal.Backend.Contracts.Dtos.Item.Story;
+using NewsPortal.Backend.Contracts.Dtos.Item;
 using NewsPortal.Backend.Contracts.Filters;
 using NewsPortal.Backend.Contracts.Responses;
+using NewsPortal.Backend.Domain.Repositories;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews.Models;
 using NewsPortal.Backend.UnitTests.Application.Item.MockData;
@@ -20,8 +21,13 @@ public class StoriesServiceTests : BaseItemServiceTestFixture
     public void SetUp()
     {
         HackerNewsClient = new Mock<IHackerNewsClient>();
+        ItemsRepository = new Mock<IItemsRepository>();
         ItemsCacheService = new Mock<IItemsCacheService>();
-        _storiesService = new StoriesService(HackerNewsClient.Object, ItemsCacheService.Object, Mapper);
+        _storiesService = new StoriesService(
+            HackerNewsClient.Object, 
+            ItemsRepository.Object,
+            ItemsCacheService.Object,
+            Mapper);
     }
 
     #region GetNewestStoriesTests

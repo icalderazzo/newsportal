@@ -1,19 +1,21 @@
-﻿﻿using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using NewsPortal.Backend.Application.Services;
-using NewsPortal.Backend.Contracts.Dtos.Item.Story;
+using NewsPortal.Backend.Contracts.Dtos.Item;
 using NewsPortal.Backend.Contracts.Filters;
 using NewsPortal.Backend.Contracts.Responses;
+using NewsPortal.Backend.Domain.Repositories;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews;
 
 [assembly: InternalsVisibleTo("NewsPortal.Backend.UnitTests")]
 namespace NewsPortal.Backend.Application.Item.Story;
 
-internal class StoriesService : BaseItemService<StoryDto>, IStoriesService 
+internal class StoriesService : BaseItemService<Domain.Models.Items.Story, StoryDto>, IStoriesService 
 {
     public StoriesService(
-        IHackerNewsClient hackerNewsClient,  
+        IHackerNewsClient hackerNewsClient,
+        IItemsRepository itemsRepository,
         IItemsCacheService itemsCacheService,
-        ItemMapper mapper) : base(hackerNewsClient, itemsCacheService, mapper)
+        ItemMapper mapper) : base(hackerNewsClient, itemsRepository, itemsCacheService, mapper)
     {
     }
 

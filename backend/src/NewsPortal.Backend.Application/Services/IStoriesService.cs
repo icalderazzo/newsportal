@@ -1,10 +1,10 @@
-﻿using NewsPortal.Backend.Contracts.Dtos.Item.Story;
+﻿using NewsPortal.Backend.Contracts.Dtos.Item;
 using NewsPortal.Backend.Contracts.Filters;
 using NewsPortal.Backend.Contracts.Responses;
 
 namespace NewsPortal.Backend.Application.Services;
 
-public interface IStoriesService : IItemService<StoryDto>
+public interface IStoriesService : IItemService<Domain.Models.Items.Story, StoryDto>
 {
     /// <summary>
     ///     Gets the newest stories filtered by pages.

@@ -2,7 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NewsPortal.Backend.Application.Services;
-using NewsPortal.Backend.Contracts.Dtos.Item.Story;
+using NewsPortal.Backend.Contracts.Dtos.Item;
 
 namespace NewsPortal.Backend.Application.BackgroundServices;
 
@@ -55,7 +55,7 @@ public class UpdateStoriesBackgroundService : IHostedService, IDisposable
         _logger.LogInformation($"{nameof(UpdateStoriesBackgroundService)} is working.");
         
         using var scope = _serviceProvider.CreateScope();
-        var itemService = scope.ServiceProvider.GetRequiredService<IItemService<StoryDto>>();
+        var itemService = scope.ServiceProvider.GetRequiredService<IItemService<Domain.Models.Items.Story, StoryDto>>();
         await itemService.UpdateItems();
         
         _executionCount++;
