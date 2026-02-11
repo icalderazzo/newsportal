@@ -1,17 +1,21 @@
 <div class="news-box">
+  <div class="header-container">
+    <h1>Latests stories!</h1>
+    <button mat-button (click)="showSearchBar = !showSearchBar">
+      <mat-icon fontIcon="search"/>
+      Search
+    </button>
+  </div>
+
   @if (showSearchBar) {
     <div>
-      <stories-searchbar (searchNewsEvent)="search($event)" />
+      <news-searchbar (searchNewsEvent)="search($event)" />
     </div>
   }
 
-  <div>
-    <h1>Latests stories!</h1>
-  </div>
-
   <mat-divider/>
 
-  <stories-table [loading]="loading" [news]="currentNews" />
+  <news-table [loading]="loading" [news]="currentNews" [mode]="'stories'" (bookmarkToggled)="onBookmarkToggled($event)"/>
 
-  <stories-paginator #paginator [length]="totalNewsCount" (changePageEvent)="changePage($event)" />
+  <news-paginator #paginator [length]="totalNewsCount" (changePageEvent)="changePage($event)" />
 </div>

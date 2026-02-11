@@ -1,8 +1,8 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { News } from '../core/models/newsportal/news';
 import { NewsPortalPagedResponse } from '../core/models/newsportal/newsPortalPagedResponse';
 import { NewsportalService } from '../core/services/newsportal.service';
-import { StoriespaginatorComponent } from './storiespaginator/storiespaginator.component';
+import { NewspaginatorComponent } from '../shared/news-shared/newspaginator/newspaginator.component';
 
 @Component({
     selector: 'app-stories',
@@ -12,17 +12,18 @@ import { StoriespaginatorComponent } from './storiespaginator/storiespaginator.c
 })
 export class StoriesComponent implements OnInit {
   
-  constructor(private newsPortalService: NewsportalService) {}
-  
-  @Input() showSearchBar : boolean | undefined;
+  constructor(
+    private newsPortalService: NewsportalService
+  ) {}
 
-  @ViewChild(StoriespaginatorComponent) paginator: StoriespaginatorComponent | undefined;
+  @ViewChild(NewspaginatorComponent) paginator: NewspaginatorComponent | undefined;
 
   newsResponse: NewsPortalPagedResponse<News[]> | undefined;  
   currentNews: News[] | undefined;
   totalNewsCount: number | undefined;
   loading = true;
   searchString: string | undefined;
+  showSearchBar = false;
 
   ngOnInit(): void {
     this.loadNews();
@@ -55,5 +56,17 @@ export class StoriesComponent implements OnInit {
     this.searchString = $event;
     this.paginator!.pageIndex = 0;
     this.loadNews();
+  }
+
+  onBookmarkToggled(news: News) {
+    try {
+      if(news.isbookmarked) {
+        this.newsPortalService.deleteBookmark(news.id).subscribe();
+      } else {
+        this.newsPortalService.bookmarkItem(news.id).subscribe();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
