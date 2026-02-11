@@ -7,16 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\NewsPortal.Backend.Application\NewsPortal.Backend.Application.csproj" />
-      <ProjectReference Include="..\NewsPortal.Backend.Infrastructure\NewsPortal.Backend.Infrastructure.csproj" />
+        <ProjectReference Include="..\NewsPortal.Backend.Application\NewsPortal.Backend.Application.csproj"/>
+        <ProjectReference Include="..\NewsPortal.Backend.Infrastructure\NewsPortal.Backend.Infrastructure.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.3">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.3">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.2"/>
     </ItemGroup>
 
 </Project>

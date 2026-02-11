@@ -12,7 +12,8 @@ internal abstract class BaseHackerNewsClient
 
     protected BaseHackerNewsClient(IOptions<HackerNewsOptions> options)
     {
-        Client = new RestClient($"{options.Value.BaseUrl}/v{options.Value.Version}");;
+        Client = new RestClient($"{options.Value.BaseUrl}/v{options.Value.Version}");
+        ;
     }
 
     /// <summary>
@@ -24,13 +25,13 @@ internal abstract class BaseHackerNewsClient
     protected async Task<HackerNewsClientResponse<T>> Get<T>(string uri)
     {
         var result = new HackerNewsClientResponse<T>();
-        
+
         var req = new RestRequest(uri);
         req.AddQueryParameter("print", "pretty");
 
         var response = await Client.ExecuteAsync(req);
         result.Code = response.StatusCode;
-        
+
         if (!response.IsSuccessful) return result;
 
         result.Success = true;

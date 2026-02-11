@@ -15,7 +15,7 @@ internal class ItemsRepository : BaseRepository<Item>, IItemsRepository
     {
         var newEntry = Context.Set<UserItem>().Add(userItem).Entity;
         await Complete();
-        
+
         return newEntry;
     }
 
@@ -30,7 +30,7 @@ internal class ItemsRepository : BaseRepository<Item>, IItemsRepository
             var skip = (paginationFilter.PageNumber - 1) * paginationFilter.PageSize;
             query = query.Skip(skip).Take(paginationFilter.PageSize);
         }
-        
+
         query = query.Include(ui => ui.Item);
 
         return await query.ToListAsync();

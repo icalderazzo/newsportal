@@ -4,6 +4,5 @@ namespace NewsPortal.Backend.Domain.Models;
 
 public abstract class BaseModel
 {
-    [Key]
-    public int Id { get; set; }
+    [Key] public int Id { get; set; }
 }

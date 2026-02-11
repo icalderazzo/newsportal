@@ -4,8 +4,8 @@ using NewsPortal.Backend.Contracts.Responses;
 
 namespace NewsPortal.Backend.Application.Services;
 
-public interface IItemService<TDomain, TDto> 
-    where TDomain : Domain.Models.Items.Item 
+public interface IItemService<TDomain, TDto>
+    where TDomain : Domain.Models.Items.Item
     where TDto : ItemDto
 {
     Task UpdateItems();

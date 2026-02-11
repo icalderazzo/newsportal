@@ -25,10 +25,10 @@ public static class ConfigureServices
             var factory = s.GetRequiredService<NewsPortalContextFactory>();
             return factory.CreateDbContext();
         });
-        
+
         // Repositories
         services.AddScoped<IItemsRepository, ItemsRepository>();
-        
+
         // Http
         services.AddHackerNewsClient(cfg =>
         {

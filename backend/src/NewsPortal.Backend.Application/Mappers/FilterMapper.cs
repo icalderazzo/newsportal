@@ -1,3 +1,5 @@
+using NewsPortal.Backend.Contracts.Filters;
+using NewsPortal.Backend.Domain.Filters;
 using Riok.Mapperly.Abstractions;
 
 namespace NewsPortal.Backend.Application.Mappers;
@@ -6,5 +8,5 @@ namespace NewsPortal.Backend.Application.Mappers;
 public partial class FilterMapper
 {
     // DTO to Domain
-    public partial Domain.Filters.DbPaginationFilter? MapToDomain(Contracts.Filters.PaginationFilter? filter);
+    public partial DbPaginationFilter? MapToDomain(PaginationFilter? filter);
 }

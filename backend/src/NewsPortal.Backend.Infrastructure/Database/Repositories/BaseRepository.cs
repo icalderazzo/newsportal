@@ -7,12 +7,12 @@ namespace NewsPortal.Backend.Infrastructure.Database.Repositories;
 internal class BaseRepository<T> : IRepository<T> where T : BaseModel
 {
     protected readonly NewsPortalContext Context;
-    
+
     protected BaseRepository(NewsPortalContext context)
     {
         Context = context;
     }
-    
+
     public async Task<T?> GetById(int id)
     {
         return await Context.Set<T>()
@@ -24,7 +24,7 @@ internal class BaseRepository<T> : IRepository<T> where T : BaseModel
     {
         var newEntry = Context.Set<T>().Add(entity).Entity;
         await Complete();
-        
+
         return newEntry;
     }
 

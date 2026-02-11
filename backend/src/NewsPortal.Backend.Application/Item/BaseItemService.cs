@@ -9,20 +9,20 @@ using NewsPortal.Backend.Infrastructure.Http.HackerNews;
 
 namespace NewsPortal.Backend.Application.Item;
 
-internal abstract class BaseItemService<TDomain, TDto> : IItemService<TDomain, TDto>     
-    where TDomain : Domain.Models.Items.Item 
+internal abstract class BaseItemService<TDomain, TDto> : IItemService<TDomain, TDto>
+    where TDomain : Domain.Models.Items.Item
     where TDto : ItemDto
 {
     private const int TestUserId = 1;
-    
-    protected readonly IHackerNewsClient HackerNewsClient;
-    protected readonly IItemsRepository ItemsRepository;
-    protected readonly IItemsCacheService ItemsCacheService;
-    protected readonly ItemMapper ItemMapper;
     protected readonly FilterMapper FilterMapper;
-    
+
+    protected readonly IHackerNewsClient HackerNewsClient;
+    protected readonly ItemMapper ItemMapper;
+    protected readonly IItemsCacheService ItemsCacheService;
+    protected readonly IItemsRepository ItemsRepository;
+
     protected BaseItemService(
-        IHackerNewsClient hackerNewsClient, 
+        IHackerNewsClient hackerNewsClient,
         IItemsRepository itemsRepository,
         IItemsCacheService itemsCacheService,
         ItemMapper itemMapper,
@@ -34,11 +34,11 @@ internal abstract class BaseItemService<TDomain, TDto> : IItemService<TDomain, T
         ItemMapper = itemMapper;
         FilterMapper = filterMapper;
     }
-    
+
     public async Task UpdateItems()
     {
         var updatedItems = await HackerNewsClient.GetChangedItemsAndProfiles();
-        if(updatedItems.Data is not null)
+        if (updatedItems.Data is not null)
             await ItemsCacheService.UpdateItems(updatedItems.Data.Items, GetItemById);
     }
 
@@ -51,16 +51,16 @@ internal abstract class BaseItemService<TDomain, TDto> : IItemService<TDomain, T
             // Get item from cache (or API call) & map to domain model
             var item = await GetItemById(itemId);
             var domainItem = ItemMapper.MapToDomainItem<TDomain>(item!);
-            
+
             // Save item
             await ItemsRepository.Save(domainItem);
         }
-        
+
         // Bookmark item for current user
-        await ItemsRepository.BookmarkItem(new UserItem()
+        await ItemsRepository.BookmarkItem(new UserItem
         {
             ItemId = itemId,
-            UserId = TestUserId,
+            UserId = TestUserId
         });
     }
 
@@ -68,13 +68,13 @@ internal abstract class BaseItemService<TDomain, TDto> : IItemService<TDomain, T
     {
         var dbFilter = FilterMapper.MapToDomain(filter);
         var bookMarkItems = await ItemsRepository.GetBookmarkItems(TestUserId, dbFilter);
-        
+
         var bookmarkCount = await ItemsRepository.CountBookmarkItems(TestUserId);
 
-        return new PagedResponse<List<TDto>>()
+        return new PagedResponse<List<TDto>>
         {
             Data = bookMarkItems.Select(ui => ItemMapper.MapToItemDto<TDto>(ui.Item)).ToList(),
-            TotalRecords = bookmarkCount,
+            TotalRecords = bookmarkCount
         };
     }
 
@@ -86,9 +86,9 @@ internal abstract class BaseItemService<TDomain, TDto> : IItemService<TDomain, T
     protected async Task<TDto?> GetItemById(int itemId)
     {
         TDto? result = null;
-        
+
         var itemResponse = await HackerNewsClient.GetItemById(itemId);
-        if (itemResponse.Success && itemResponse.Data != null) 
+        if (itemResponse.Success && itemResponse.Data != null)
             result = ItemMapper.MapToItemDto<TDto>(itemResponse.Data);
 
         return result;

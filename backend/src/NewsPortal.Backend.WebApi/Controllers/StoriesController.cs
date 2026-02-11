@@ -13,7 +13,7 @@ namespace NewsPortal.Backend.WebApi.Controllers;
 public class StoriesController : ControllerBase
 {
     private readonly IStoriesService _storiesService;
-    
+
     public StoriesController(IStoriesService storiesService)
     {
         _storiesService = storiesService;
@@ -28,21 +28,18 @@ public class StoriesController : ControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(PagedResponse<List<StoryDto>>), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.InternalServerError)]
-    public async Task<IActionResult> GetStories([FromQuery] PaginationFilter paginationFilter, [FromQuery] string? searchString = null)
+    public async Task<IActionResult> GetStories([FromQuery] PaginationFilter paginationFilter,
+        [FromQuery] string? searchString = null)
     {
         try
         {
             PagedResponse<List<StoryDto>>? response;
-            
+
             if (string.IsNullOrEmpty(searchString))
-            {
                 response = await _storiesService.GetNewestStories(paginationFilter);
-            }
             else
-            {
                 response = await _storiesService.Search(searchString, paginationFilter);
-            }
-            
+
             response.FillPagedResponseData(paginationFilter, Request.GetRequestBaseUri(), searchString);
             return Ok(response);
         }

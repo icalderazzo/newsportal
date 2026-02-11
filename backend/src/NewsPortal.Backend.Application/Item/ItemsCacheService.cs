@@ -5,25 +5,26 @@ using NewsPortal.Backend.Application.Services;
 using NewsPortal.Backend.Contracts.Dtos.Item;
 
 [assembly: InternalsVisibleTo("NewsPortal.Backend.UnitTests")]
+
 namespace NewsPortal.Backend.Application.Item;
 
 internal class ItemsCacheService : IItemsCacheService
 {
     private readonly IMemoryCache _memoryCache;
-    
+
     public ItemsCacheService(IMemoryCache memoryCache)
     {
         _memoryCache = memoryCache;
     }
-    
+
     public async Task<List<T>> GetOrCreateItems<T>(
         IEnumerable<int> itemIds, Func<int, Task<T?>> createItemFunc) where T : ItemDto
-    { 
+    {
         //  Items concurrent collection
         var items = new ConcurrentBag<T>();
 
         //  Execute get or create async in parallel 
-        await Parallel.ForEachAsync(itemIds ,async(itemId, cancellationToken) =>
+        await Parallel.ForEachAsync(itemIds, async (itemId, cancellationToken) =>
         {
             //  Get Item from cache or call the API
             var item = await _memoryCache.GetOrCreateAsync<T>(
@@ -38,33 +39,33 @@ internal class ItemsCacheService : IItemsCacheService
                         entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
                         return createItemResult;
                     }
-                
+
                     //  Add an empty object with 1 millisecond life time if create item failed
                     entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMilliseconds(1);
                     return default!;
                 });
-        
+
             //  Add item to the queue
             if (item is not null && item.Id > 0) items.Add(item);
         });
-    
+
         return items.ToList();
     }
 
     public async Task UpdateItems<T>(
         IEnumerable<int> itemIds, Func<int, Task<T?>> getUpdatedItemFunc) where T : ItemDto
     {
-        await Parallel.ForEachAsync(itemIds,async (itemId, cancellationToken) =>
+        await Parallel.ForEachAsync(itemIds, async (itemId, cancellationToken) =>
         {
             var item = _memoryCache.Get<T>(itemId);
             if (item is not null)
             {
-               var updatedItem = await getUpdatedItemFunc(itemId);
-               if (updatedItem is not null)
-               {
-                   _memoryCache.Remove(itemId);
-                   _memoryCache.Set(itemId, updatedItem);
-               }
+                var updatedItem = await getUpdatedItemFunc(itemId);
+                if (updatedItem is not null)
+                {
+                    _memoryCache.Remove(itemId);
+                    _memoryCache.Set(itemId, updatedItem);
+                }
             }
         });
     }

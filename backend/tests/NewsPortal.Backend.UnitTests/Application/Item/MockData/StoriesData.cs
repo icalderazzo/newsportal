@@ -32,6 +32,6 @@ public static class StoriesData
             Id = 4,
             Title = "Story4",
             Type = "story"
-        },
+        }
     };
 }
