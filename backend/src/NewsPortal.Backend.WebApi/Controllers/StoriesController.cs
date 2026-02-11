@@ -53,6 +53,27 @@ public class StoriesController : ControllerBase
     }
 
     /// <summary>
+    ///     Gets the bookmarked stories of the user.
+    /// </summary>
+    /// <param name="paginationFilter"></param>
+    /// <returns></returns>
+    [HttpGet("bookmarks")]
+    [ProducesResponseType(typeof(PagedResponse<List<StoryDto>>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.InternalServerError)]
+    public async Task<IActionResult> GetBookmarkedStories([FromQuery] PaginationFilter paginationFilter)
+    {
+        try
+        {
+            var bookmarks = await _storiesService.GetBookmarks(paginationFilter);
+            return Ok(bookmarks);
+        }
+        catch (Exception e)
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError);
+        }
+    }
+
+    /// <summary>
     ///     Bookmarks story for the logged user
     /// </summary>
     /// <param name="storyId"></param>

@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using NewsPortal.Backend.Application.Mappers;
 using NewsPortal.Backend.Application.Services;
 using NewsPortal.Backend.Contracts.Dtos.Item;
 using NewsPortal.Backend.Contracts.Filters;
@@ -7,7 +8,7 @@ using NewsPortal.Backend.Domain.Repositories;
 using NewsPortal.Backend.Infrastructure.Http.HackerNews;
 
 [assembly: InternalsVisibleTo("NewsPortal.Backend.UnitTests")]
-namespace NewsPortal.Backend.Application.Item.Story;
+namespace NewsPortal.Backend.Application.Item;
 
 internal class StoriesService : BaseItemService<Domain.Models.Items.Story, StoryDto>, IStoriesService 
 {
@@ -15,7 +16,8 @@ internal class StoriesService : BaseItemService<Domain.Models.Items.Story, Story
         IHackerNewsClient hackerNewsClient,
         IItemsRepository itemsRepository,
         IItemsCacheService itemsCacheService,
-        ItemMapper mapper) : base(hackerNewsClient, itemsRepository, itemsCacheService, mapper)
+        ItemMapper itemMapper,
+        FilterMapper filterMapper) : base(hackerNewsClient, itemsRepository, itemsCacheService, itemMapper, filterMapper)
     {
     }
 

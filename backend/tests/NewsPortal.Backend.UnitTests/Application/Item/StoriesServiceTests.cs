@@ -1,6 +1,6 @@
 using System.Net;
 using Moq;
-using NewsPortal.Backend.Application.Item.Story;
+using NewsPortal.Backend.Application.Item;
 using NewsPortal.Backend.Application.Services;
 using NewsPortal.Backend.Contracts.Dtos.Item;
 using NewsPortal.Backend.Contracts.Filters;
@@ -27,7 +27,8 @@ public class StoriesServiceTests : BaseItemServiceTestFixture
             HackerNewsClient.Object, 
             ItemsRepository.Object,
             ItemsCacheService.Object,
-            Mapper);
+            ItemMapper,
+            FilterMapper);
     }
 
     #region GetNewestStoriesTests

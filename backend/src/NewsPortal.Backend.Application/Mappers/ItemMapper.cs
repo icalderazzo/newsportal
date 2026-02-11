@@ -1,7 +1,7 @@
 ﻿using NewsPortal.Backend.Contracts.Dtos.Item;
 using Riok.Mapperly.Abstractions;
 
-namespace NewsPortal.Backend.Application.Item;
+namespace NewsPortal.Backend.Application.Mappers;
 
 [Mapper]
 public partial class ItemMapper
@@ -20,8 +20,11 @@ public partial class ItemMapper
     [MapperIgnoreSource(nameof(Infrastructure.Http.HackerNews.Models.Contracts.Item.Descendants))]
     private partial StoryDto MapToStoryDto(Infrastructure.Http.HackerNews.Models.Contracts.Item item);
     
+    // Domain to DTO
+    public partial T MapToItemDto<T>(Domain.Models.Items.Item item);
+    private partial StoryDto MapToStoryDto(Domain.Models.Items.Item item);
+    
     // DTO to Domain
     public partial T MapToDomainItem<T>(ItemDto itemDto);
-    
     private partial Domain.Models.Items.Story MapToDomainItem(ItemDto itemDto);
 }

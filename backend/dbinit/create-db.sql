@@ -51,5 +51,9 @@ CREATE INDEX [IX_UserItems_ItemId] ON [UserItems] ([ItemId]);
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
 VALUES (N'20260211121405_InitialCreate', N'10.0.3');
 
-COMMIT;
+-- User 1 for test puropuses
+INSERT INTO [Users] ([FirstName], [LastName], [Email])
+VALUES (N'John', N'Doe', N'johndoe@test.com')
+
+    COMMIT;
 GO
