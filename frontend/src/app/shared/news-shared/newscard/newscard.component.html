@@ -1,0 +1,25 @@
+<mat-card>
+  <mat-card-header>
+    <h2>{{ news.title }}</h2>
+    <button mat-icon-button class="bookmark-icon" (click)="toggleBookmark()">
+      @if (mode === 'stories') {
+        <mat-icon [class.bookmarked]="news.isBookmarked">{{ news.isBookmarked ? 'bookmark' : 'bookmark_border' }}</mat-icon>
+      } @else {
+        <mat-icon>close</mat-icon>
+      }
+    </button>
+  </mat-card-header>
+  @if (news.text) {
+    <mat-card-content>
+      <p>{{ news.text }}</p>
+    </mat-card-content>
+  }
+  <mat-card-actions align="end">
+    @if (news.url) {
+      <a mat-raised-button [href]="news.url" target="_blank">Go to source</a>
+    } @else {
+      <a mat-raised-button disabled>Source not available</a>
+    }
+  </mat-card-actions>
+</mat-card>
+<br>

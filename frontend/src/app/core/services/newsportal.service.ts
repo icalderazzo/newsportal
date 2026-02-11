@@ -17,7 +17,9 @@ export class NewsportalService {
 
   private readonly API_ROUTES = {
     getLatestNews: (pageNumber:number , pageSize: number) => `/stories?pageNumber=${pageNumber}&pageSize=${pageSize}`,
-    searchNews: (searchString: string, pageNumber:number , pageSize: number) => `/stories?searchString=${searchString}&pageNumber=${pageNumber}&pageSize=${pageSize}`
+    searchNews: (searchString: string, pageNumber:number , pageSize: number) => `/stories?searchString=${searchString}&pageNumber=${pageNumber}&pageSize=${pageSize}`,
+    getBookmarks: (pageNumber:number , pageSize: number) => `/stories/bookmarks?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+    bookmarkItem: (newsId: number) => `/stories/${newsId}/bookmark`
   }
 
   constructor(private http: HttpClient) { }
@@ -29,5 +31,17 @@ export class NewsportalService {
   public searchNews(searchString: string, pageNumber = this.defaultPageNumber, pageSize = this.defaultPageSize): Observable<NewsPortalPagedResponse<News[]>>{
 
     return this.http.get<NewsPortalPagedResponse<News[]>>(`${this.baseUrl}${this.API_ROUTES.searchNews(searchString, pageNumber, pageSize)}`);
+  }
+
+  public getBookmarks(pageNumber = this.defaultPageNumber, pageSize = this.defaultPageSize): Observable<NewsPortalPagedResponse<News[]>>{
+    return this.http.get<NewsPortalPagedResponse<News[]>>(`${this.baseUrl}${this.API_ROUTES.getBookmarks(pageNumber, pageSize)}`);
+  }
+
+  public bookmarkItem(newsId: number): Observable<any>{
+    return this.http.post(`${this.baseUrl}${this.API_ROUTES.bookmarkItem(newsId)}`, {});
+  }
+
+  public deleteBookmark(newsId: number): Observable<any>{
+    return this.http.delete(`${this.baseUrl}${this.API_ROUTES.bookmarkItem(newsId)}`);
   }
 }

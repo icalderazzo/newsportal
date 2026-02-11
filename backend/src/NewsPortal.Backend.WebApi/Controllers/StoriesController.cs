@@ -28,8 +28,7 @@ public class StoriesController : ControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(PagedResponse<List<StoryDto>>), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.InternalServerError)]
-    public async Task<IActionResult> GetStories([FromQuery] PaginationFilter paginationFilter,
-        [FromQuery] string? searchString = null)
+    public async Task<IActionResult> GetStories([FromQuery] PaginationFilter paginationFilter, [FromQuery] string? searchString = null)
     {
         try
         {
@@ -71,7 +70,7 @@ public class StoriesController : ControllerBase
     }
 
     /// <summary>
-    ///     Bookmarks story for the logged user
+    ///     Bookmarks story for the logged user.
     /// </summary>
     /// <param name="storyId"></param>
     /// <returns></returns>
@@ -84,6 +83,27 @@ public class StoriesController : ControllerBase
         {
             await _storiesService.BookmarkItem(storyId);
             return Ok();
+        }
+        catch (Exception)
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError);
+        }
+    }
+    
+    /// <summary>
+    ///     Deletes bookmarked story for the logged user.
+    /// </summary>
+    /// <param name="storyId"></param>
+    /// <returns></returns>
+    [HttpDelete("{storyId:int}/bookmark")]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.InternalServerError)]
+    public async Task<IActionResult> DeleteBookmark(int storyId)
+    {
+        try
+        {
+            await _storiesService.DeleteBookmark(storyId);
+            return NoContent();
         }
         catch (Exception)
         {

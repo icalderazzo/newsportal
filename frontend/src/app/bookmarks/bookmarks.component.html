@@ -1,0 +1,11 @@
+<div class="news-box">
+  <div>
+    <h1>My Bookmarks</h1>
+  </div>
+
+  <mat-divider/>
+
+  <news-table [loading]="loading" [news]="currentNews" [mode]="'bookmarks'" />
+
+  <news-paginator #paginator [length]="totalNewsCount" (changePageEvent)="changePage($event)" />
+</div>

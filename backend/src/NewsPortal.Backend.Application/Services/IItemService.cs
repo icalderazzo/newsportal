@@ -11,4 +11,5 @@ public interface IItemService<TDomain, TDto>
     Task UpdateItems();
     Task BookmarkItem(int itemId);
     Task<PagedResponse<List<TDto>>> GetBookmarks(PaginationFilter? filter = null);
+    Task DeleteBookmark(int itemId);
 }

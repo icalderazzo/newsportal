@@ -42,6 +42,9 @@ internal class StoriesService : BaseItemService<Story, StoryDto>, IStoriesServic
 
         //  Order stories list by newest
         items = items.OrderByDescending(x => x.Id).ToList();
+        
+        //  Tag bookmarked stories
+        await TagBookmarkedItems(items);
 
         return new PagedResponse<List<StoryDto>>
         {
@@ -62,6 +65,9 @@ internal class StoriesService : BaseItemService<Story, StoryDto>, IStoriesServic
         var filteredItems = items
             .Where(i => i.Title.Trim().Contains(searchString.Trim(), StringComparison.OrdinalIgnoreCase))
             .ToList();
+        
+        //  Tag bookmarked stories
+        await TagBookmarkedItems(filteredItems);
 
         //  Build and return the paginated response
         return new PagedResponse<List<StoryDto>>

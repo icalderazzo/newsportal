@@ -36,8 +36,25 @@ internal class ItemsRepository : BaseRepository<Item>, IItemsRepository
         return await query.ToListAsync();
     }
 
+    public async Task<List<int>> GetBookmarkItemIds(int userId)
+    {
+        var query = Context.Set<UserItem>()
+            .AsNoTracking()
+            .Where(ui => ui.UserId.Equals(userId))
+            .Select(ui => ui.ItemId);
+        
+        return await query.ToListAsync();
+    }
+
     public async Task<int> CountBookmarkItems(int userId)
     {
         return await Context.Set<UserItem>().CountAsync(ui => ui.UserId.Equals(userId));
+    }
+
+    public async Task<int> DeleteBookmark(int itemId, int userId)
+    {
+        return await Context.Set<UserItem>()
+            .Where(ui => itemId.Equals(itemId) && ui.UserId.Equals(userId))
+            .ExecuteDeleteAsync();
     }
 }

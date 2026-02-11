@@ -8,4 +8,5 @@ public class ItemDto
     public string? Text { get; set; }
     public string? Url { get; set; }
     public DateTime Time { get; set; }
+    public bool IsBookmarked { get; set; }
 }

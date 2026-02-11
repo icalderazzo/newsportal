@@ -1,13 +1,8 @@
 <mat-toolbar color="primary">
     <mat-toolbar-row>
-        <span>News Portal</span>
-        <div>
-            <button mat-button (click)="showSearchBar = !showSearchBar">
-                <mat-icon fontIcon="search"/>
-                Search
-            </button>
-        </div>
+        <a mat-button routerLink="/stories" routerLinkActive="active-link">News Portal</a>
+        <a mat-button routerLink="/bookmarks" routerLinkActive="active-link">My Bookmarks</a>
     </mat-toolbar-row>
 </mat-toolbar>
 
-<app-stories [showSearchBar]="showSearchBar" />
+<router-outlet />

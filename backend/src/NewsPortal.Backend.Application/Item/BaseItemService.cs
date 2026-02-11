@@ -78,6 +78,11 @@ internal abstract class BaseItemService<TDomain, TDto> : IItemService<TDomain, T
         };
     }
 
+    public async Task DeleteBookmark(int itemId)
+    {
+        await ItemsRepository.DeleteBookmark(itemId, TestUserId);
+    }
+
     /// <summary>
     ///     Calls GetItemById from HackerNews client and returns the mapped item if request succeeded.
     /// </summary>
@@ -92,5 +97,27 @@ internal abstract class BaseItemService<TDomain, TDto> : IItemService<TDomain, T
             result = ItemMapper.MapToItemDto<TDto>(itemResponse.Data);
 
         return result;
+    }
+    
+    /// <summary>
+    ///     Tags bookmarked items in an item collection.
+    /// </summary>
+    /// <param name="items"></param>
+    protected async Task TagBookmarkedItems(List<TDto> items)
+    {
+        var bookmarkedItemIds = await ItemsRepository.GetBookmarkItemIds(TestUserId);
+        
+        if(bookmarkedItemIds.Count == 0) return;
+
+        foreach (var item in items)
+        {
+            foreach (var bookmarkedItemId in bookmarkedItemIds)
+            {
+                if (bookmarkedItemId.Equals(item.Id))
+                {
+                    item.IsBookmarked = true;
+                }
+            }
+        }
     }
 }

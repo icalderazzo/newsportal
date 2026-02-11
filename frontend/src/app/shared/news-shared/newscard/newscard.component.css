@@ -1,0 +1,21 @@
+mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+}
+
+mat-card-header h2 {
+  flex: 1;
+  margin: 0;
+}
+
+.bookmark-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.bookmarked {
+  color: red;
+}
