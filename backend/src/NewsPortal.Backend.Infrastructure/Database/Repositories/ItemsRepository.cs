@@ -54,7 +54,7 @@ internal class ItemsRepository : BaseRepository<Item>, IItemsRepository
     public async Task<int> DeleteBookmark(int itemId, int userId)
     {
         return await Context.Set<UserItem>()
-            .Where(ui => itemId.Equals(itemId) && ui.UserId.Equals(userId))
+            .Where(ui => ui.ItemId.Equals(itemId) && ui.UserId.Equals(userId))
             .ExecuteDeleteAsync();
     }
 }

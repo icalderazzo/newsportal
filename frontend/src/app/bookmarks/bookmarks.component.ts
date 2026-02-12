@@ -8,17 +8,16 @@ import { NewspaginatorComponent } from '../shared/news-shared/newspaginator/news
   selector: 'app-bookmarks',
   templateUrl: './bookmarks.component.html',
   styleUrl: './bookmarks.component.css',
-  standalone: false
+  standalone: false,
 })
 export class BookmarksComponent implements OnInit {
-  
-  constructor(
-    private newsPortalService: NewsportalService
-  ) {}
+  constructor(private newsPortalService: NewsportalService) {}
 
-  @ViewChild(NewspaginatorComponent) paginator: NewspaginatorComponent | undefined;
+  @ViewChild(NewspaginatorComponent) paginator:
+    | NewspaginatorComponent
+    | undefined;
 
-  newsResponse: NewsPortalPagedResponse<News[]> | undefined;  
+  newsResponse: NewsPortalPagedResponse<News[]> | undefined;
   currentNews: News[] | undefined;
   totalNewsCount: number | undefined;
   loading = true;
@@ -28,24 +27,34 @@ export class BookmarksComponent implements OnInit {
     this.loadNews();
   }
 
-  loadNews(pageNumber = 1, pageSize = 5)
-  {
+  loadNews(pageNumber = 1, pageSize = 5) {
     this.loading = true;
     try {
-      this.newsPortalService.getBookmarks(pageNumber, pageSize)
+      this.newsPortalService
+        .getBookmarks(pageNumber, pageSize)
         .subscribe((response) => {
           this.newsResponse = response;
           this.totalNewsCount = response.totalRecords;
           this.currentNews = response.data;
         });
     } catch (error) {
-      console.log(error);  
+      console.log(error);
     } finally {
       this.loading = false;
     }
   }
 
   changePage($event: any) {
-    this.loadNews($event[0], $event[1])
+    this.loadNews($event[0], $event[1]);
+  }
+
+  onDeleteBookmark(news: News) {
+    try {
+      this.newsPortalService.deleteBookmark(news.id).subscribe(() => {
+        this.loadNews();
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

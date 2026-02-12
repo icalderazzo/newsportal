@@ -5,7 +5,7 @@
 
   <mat-divider/>
 
-  <news-table [loading]="loading" [news]="currentNews" [mode]="'bookmarks'" />
+  <news-table [loading]="loading" [news]="currentNews" [mode]="'bookmarks'" (bookmarkToggled)="onDeleteBookmark($event)" />
 
   <news-paginator #paginator [length]="totalNewsCount" (changePageEvent)="changePage($event)" />
 </div>
