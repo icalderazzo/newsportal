@@ -7,12 +7,12 @@ namespace NewsPortal.Backend.Application.BackgroundServices;
 
 public class NewestStoriesBackgroundService : IHostedService
 {
-    private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<NewestStoriesBackgroundService> _logger;
+    private readonly IServiceProvider _serviceProvider;
     private bool _workCompleted;
-    
+
     public NewestStoriesBackgroundService(
-        IServiceProvider serviceProvider, 
+        IServiceProvider serviceProvider,
         ILogger<NewestStoriesBackgroundService> logger)
     {
         _serviceProvider = serviceProvider;
@@ -21,7 +21,7 @@ public class NewestStoriesBackgroundService : IHostedService
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        if (_workCompleted) 
+        if (_workCompleted)
             return Task.CompletedTask;
 
         //  Wrap DoWork() in Task.Run() to allow app to start without finishing this work.
@@ -36,7 +36,7 @@ public class NewestStoriesBackgroundService : IHostedService
         _logger.LogInformation($"{nameof(NewestStoriesBackgroundService)} stopped.");
         await Task.CompletedTask;
     }
-    
+
     /// <summary>
     ///     Gets the newest stories.
     /// </summary>

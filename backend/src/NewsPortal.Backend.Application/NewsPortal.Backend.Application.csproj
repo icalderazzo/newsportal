@@ -7,15 +7,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.2" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.2" />
-      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.2" />
-      <PackageReference Include="Riok.Mapperly" Version="4.3.0" />
+        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.3"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.3"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.3"/>
+        <PackageReference Include="Riok.Mapperly" Version="4.3.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\NewsPortal.Backend.Contracts\NewsPortal.Backend.Contracts.csproj" />
-      <ProjectReference Include="..\NewsPortal.Backend.Infrastructure\NewsPortal.Backend.Infrastructure.csproj" />
+        <ProjectReference Include="..\NewsPortal.Backend.Contracts\NewsPortal.Backend.Contracts.csproj"/>
+        <ProjectReference Include="..\NewsPortal.Backend.Infrastructure\NewsPortal.Backend.Infrastructure.csproj"/>
     </ItemGroup>
 
 </Project>

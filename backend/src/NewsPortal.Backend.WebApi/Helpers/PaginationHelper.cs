@@ -18,12 +18,12 @@ public static class PaginationHelper
     {
         //  Calculate total pages
         response.TotalPages = Convert.ToInt32(response.TotalRecords / paginationFilter.PageSize);
-        
+
         //  Build next page uri
-        response.NextPage = paginationFilter.PageNumber >= 1 && paginationFilter.PageNumber < response.TotalPages 
+        response.NextPage = paginationFilter.PageNumber >= 1 && paginationFilter.PageNumber < response.TotalPages
             ? BuildPageUri(paginationFilter.PageNumber + 1, paginationFilter.PageSize, baseUri, searchString)
             : null;
-        
+
         //  Build previous page uri
         response.PreviousPage = paginationFilter.PageNumber > 1 && paginationFilter.PageNumber <= response.TotalPages
             ? BuildPageUri(paginationFilter.PageNumber - 1, paginationFilter.PageSize, baseUri, searchString)
@@ -32,7 +32,7 @@ public static class PaginationHelper
 
     private static Uri BuildPageUri(int pageNumber, int pageSize, Uri baseUri, string? searchString = null)
     {
-        var searchStringParam = string.IsNullOrEmpty(searchString) ? string.Empty : $"{searchString}&"; 
+        var searchStringParam = string.IsNullOrEmpty(searchString) ? string.Empty : $"{searchString}&";
         var builder = new UriBuilder(baseUri)
         {
             Query = $"{searchStringParam}pageNumber={pageNumber}&pageSize={pageSize}"

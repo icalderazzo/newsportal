@@ -1,0 +1,29 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: 'NewsPortalDb'
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "YourStrong@Password123"
+      MSSQL_PID: "Developer"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    restart: unless-stopped
+    
+  db-init:
+    image: mcr.microsoft.com/mssql-tools:latest
+    container_name: 'DatabseSetup'
+    depends_on:
+      - db
+    volumes:
+      - ./dbinit/init-db.sh:/usr/local/bin/init-db.sh # Mount the custom init script
+      - ./dbinit/create-db.sql:/usr/local/bin/create-db.sql
+      - ./dbinit/create-user.sql:/usr/local/bin/create-user.sql
+    command: ["bash", "/usr/local/bin/init-db.sh"]
+    # Remove the container after the script finishes
+    profiles: ["init"]
+
+volumes:
+  sqlserver_data:

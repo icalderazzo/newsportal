@@ -16,8 +16,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 builder.Services.AddMemoryCache();
-builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 

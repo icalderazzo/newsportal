@@ -1,8 +1,11 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { News } from '../core/models/newsportal/news';
 import { NewsPortalPagedResponse } from '../core/models/newsportal/newsPortalPagedResponse';
 import { NewsportalService } from '../core/services/newsportal.service';
-import { StoriespaginatorComponent } from './storiespaginator/storiespaginator.component';
+import { NewspaginatorComponent } from '../shared/news-shared/newspaginator/newspaginator.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmationDialogComponent } from '../shared/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
     selector: 'app-stories',
@@ -12,17 +15,20 @@ import { StoriespaginatorComponent } from './storiespaginator/storiespaginator.c
 })
 export class StoriesComponent implements OnInit {
   
-  constructor(private newsPortalService: NewsportalService) {}
-  
-  @Input() showSearchBar : boolean | undefined;
+  constructor(
+    private newsPortalService: NewsportalService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) {}
 
-  @ViewChild(StoriespaginatorComponent) paginator: StoriespaginatorComponent | undefined;
+  @ViewChild(NewspaginatorComponent) paginator: NewspaginatorComponent | undefined;
 
   newsResponse: NewsPortalPagedResponse<News[]> | undefined;  
   currentNews: News[] | undefined;
   totalNewsCount: number | undefined;
   loading = true;
   searchString: string | undefined;
+  showSearchBar = false;
 
   ngOnInit(): void {
     this.loadNews();
@@ -55,5 +61,46 @@ export class StoriesComponent implements OnInit {
     this.searchString = $event;
     this.paginator!.pageIndex = 0;
     this.loadNews();
+  }
+
+  onBookmarkToggled(news: News) {
+    try {
+      if(news.isBookmarked) {
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+          data: {
+            title: 'Remove Bookmark',
+            message: 'Are you sure you want to remove this story from your bookmarks?',
+            confirmText: 'Remove',
+            cancelText: 'Cancel'
+          }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            this.newsPortalService.deleteBookmark(news.id).subscribe(() => {
+              this.snackBar.open('The story has been removed from your bookmarks', 'Close', {
+                duration: 3000,
+                horizontalPosition: 'end',
+                verticalPosition: 'top',
+                panelClass: ['success-snackbar']
+              });
+            });
+          } else {
+            news.isBookmarked = true;
+          }
+        });
+      } else {
+        this.newsPortalService.bookmarkItem(news.id).subscribe(() => {
+          this.snackBar.open('The story has been saved to your bookmarks', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top',
+            panelClass: ['success-snackbar']
+          });
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

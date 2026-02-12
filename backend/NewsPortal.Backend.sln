@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsPortal.Backend.UnitTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsPortal.Backend.Contracts", "src\NewsPortal.Backend.Contracts\NewsPortal.Backend.Contracts.csproj", "{23606D20-6A34-42BF-9BC4-A61E31F295C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsPortal.Backend.Domain", "src\NewsPortal.Backend.Domain\NewsPortal.Backend.Domain.csproj", "{B56AA792-6130-4E1A-9EE6-3DA7588CA828}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,7 @@ Global
 		{CED93A19-46ED-4775-9EC8-56558172BBB8} = {FAD93D46-D9F1-4F26-9631-35F0EE66E1CE}
 		{ECE5641F-FD7D-4B1E-B5B5-76724F0E852A} = {3F3FEF2A-27F3-4A61-950E-22FFBD07D141}
 		{23606D20-6A34-42BF-9BC4-A61E31F295C4} = {FAD93D46-D9F1-4F26-9631-35F0EE66E1CE}
+		{B56AA792-6130-4E1A-9EE6-3DA7588CA828} = {FAD93D46-D9F1-4F26-9631-35F0EE66E1CE}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{AE82083D-54D9-4F65-A4DE-C617519F0F00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -53,5 +56,9 @@ Global
 		{23606D20-6A34-42BF-9BC4-A61E31F295C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23606D20-6A34-42BF-9BC4-A61E31F295C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23606D20-6A34-42BF-9BC4-A61E31F295C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B56AA792-6130-4E1A-9EE6-3DA7588CA828}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B56AA792-6130-4E1A-9EE6-3DA7588CA828}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B56AA792-6130-4E1A-9EE6-3DA7588CA828}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B56AA792-6130-4E1A-9EE6-3DA7588CA828}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

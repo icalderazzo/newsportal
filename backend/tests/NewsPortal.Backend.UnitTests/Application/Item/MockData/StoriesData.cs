@@ -1,4 +1,4 @@
-using NewsPortal.Backend.Contracts.Dtos.Item.Story;
+using NewsPortal.Backend.Contracts.Dtos.Item;
 
 namespace NewsPortal.Backend.UnitTests.Application.Item.MockData;
 
@@ -32,6 +32,6 @@ public static class StoriesData
             Id = 4,
             Title = "Story4",
             Type = "story"
-        },
+        }
     };
 }
