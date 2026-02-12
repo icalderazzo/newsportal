@@ -76,11 +76,16 @@ By implementing the IHostedService interface and utilizing these two methods, th
 **UpdateStoriesBackgroundService**: Similar to the previous service, it utilizes the `IServiceProvider` and creates a new scope to obtain an instance of the StoriesService. In this case, the service invokes a method from the base class, ItemService, called `UpdateItems`. Inside this method, the service makes a request to the Hacker News API endpoint **/v0/updates** to retrieve the latest updates. Then, it then interacts with the ItemsCacheService to remove outdated instances of stories and create new ones based on the updated data.
 
 ## Addional features
-### Bookmars:
+### Bookmars
 The Bookmarks functionality allows the user to Bookmark stories and check them aside on a separate page. Bookmarks still preserve the original story URL so the user can go the source anytime.
 
 ## Run the application locally
-### Prerequisites: .NET 10 SDK, Node 21.0 or superior, Angular 21, Docker.
+### Prerequisites
+* .NET 10 SDK
+* Node 21.0 or superior
+* Angular 21
+* Docker
+
 ### Step-by-step
 1. Docker engine must be running
 2. In the backend folder, open the `NewsPortal.Backend.sln` with your IDE of preference.
