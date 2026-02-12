@@ -2,9 +2,11 @@
 ## Introduction
 This is a small project that showcases the integration of a Web API and Single Page Application (SPA) to provide users with a seamless experience accessing the newest stories. The stories presented in the feed are retrieved from the Hacker News API: https://github.com/HackerNews/API
 
-The development of this project revolves around two core technologies:
+The development of this project revolves around the following technologies:
 * Back-end: .NET 10 with C#15
 * Front-end: Angular 21.0
+* SQL Server 2022
+* Docker
 
 The primary objective of this endeavor is to demonstrate my development skills in both frameworks, incorporating essential modern application features, such as:
 
@@ -19,19 +21,22 @@ The primary objective of this endeavor is to demonstrate my development skills i
 
 ## Solution structure
 The solution consits in two separate projects: backend & frontend. In this section there will be an explanation of the structure of both code projects.
+Also, there's a SQL Server instance called by the API that has a mock user to do certain functionalities like Bookmarks.
 
 ### Backend
 The API consits in three layers: 
-* `WebApi`: The enty point of the application. This layer defines endpoints, routing, dependencies, error handling, etc. It depends on the Application Layer.
+* `WebApi`: The entry point of the application. This layer defines endpoints, routing, dependencies, error handling, etc. It depends on the Application Layer.
 
 * `Application`: This layer houses all the application logic, including use cases, features, and mapping. It is organized into modules, with the current implementation featuring the ItemsModule, which includes the Stories sub-module. Additionally, this layer includes background services and other relevant components that will be explained later. It relies on the Infrastructure Layer.
     
-* `Infrastructure`: Also referred to as the data access layer, the Infrastructure layer focuses on data retrieval. In the case of this solution, the only data access involves the Hacker News API. As a result, this layer incorporates an HttpClient specifically designed for interacting with the API.
+* `Infrastructure`: Also referred to as the data access layer, the Infrastructure layer focuses on data retrieval. In the case of this solution, the data access involves the Hacker News API and the SQL Server database. As a result, this layer incorporates an HttpClient specifically designed for interacting with the HackerNews API + Repositories for database communication.
+
+* `Core`: Based on Domain Driven Desing (DDD) patters, this layer defines core models and repository interfaces to do operations against Data sources. All layers depend on it.
 
 The solution includes a `Contracts` project that defines the API contract, specifying the response structure and Data Transfer Objects (DTOs).
 Within the Contracts project, the API contract outlines the expected response format, enabling API consumers to understand the data they will receive. The WebApi project does not include the API contract definition because it is required by the Application Layer for mapping purposes. Additionally, if a .NET HttpClient needs to be created for this API, it only needs to rely on the Contracts project.
 
-**Dependencies:** RestSharp/113.1.0, Newtonsoft/13.0.4, Riok.Mapperly/4.3.0
+**Dependencies:** RestSharp/113.1.0, Newtonsoft/13.0.4, Riok.Mapperly/4.3.0, EfCore/10.0.3
 
 
 ### Frontend
@@ -70,11 +75,19 @@ By implementing the IHostedService interface and utilizing these two methods, th
 
 **UpdateStoriesBackgroundService**: Similar to the previous service, it utilizes the `IServiceProvider` and creates a new scope to obtain an instance of the StoriesService. In this case, the service invokes a method from the base class, ItemService, called `UpdateItems`. Inside this method, the service makes a request to the Hacker News API endpoint **/v0/updates** to retrieve the latest updates. Then, it then interacts with the ItemsCacheService to remove outdated instances of stories and create new ones based on the updated data.
 
+## Addional features
+### Bookmars:
+The Bookmarks functionality allows the user to Bookmark stories and check them aside on a separate page. Bookmarks still preserve the original story URL so the user can go the source anytime.
+
 ## Run the application locally
-1. In the backend folder, open the `NewsPortal.Backend.sln` with your IDE of preference.
-2. Make sure the `NewsPortal.Backend.WebApi` is selected as startup project and you have selcted `NewsPortal.Backend.WebApi` profile before running the application.
-3. The application should start running in **https:localhost:7105** and you will be prompted with a new browser window in a Swagger UI - you may need to trust local dotnet certs on your system.
-4. Open a Terminal and go the ../frontend folder.
-5. Execure the following command to install dependencies `npm i`.
-6. Excecute the following command `ng serve -o`.
-7. The Angular app should start running in **https:localhost:4200**. A new browser window should pop-up with the web running.
+### Prerequisites: .NET 10 SDK, Node 21.0 or superior, Angular 21, Docker.
+### Step-by-step
+1. Docker engine must be running
+2. In the backend folder, open the `NewsPortal.Backend.sln` with your IDE of preference.
+3. In the root folder of the solution, run `make init`. This will initialize a SQL Server 2022 instance in docker. 2 containers will be initialized, wait for the one called `DatabaseSetup` to exit.
+3. Make sure the `NewsPortal.Backend.WebApi` is selected as startup project and you have selcted `NewsPortal.Backend.WebApi` profile before running the application.
+4. The application should start running in **https:localhost:7105** and you will be prompted with a new browser window in a Swagger UI - you may need to trust local dotnet certs on your system.
+5. Open a Terminal and go the ../frontend folder.
+6. Execure the following command to install dependencies `npm i`.
+7. Excecute the following command `ng serve -o`.
+8. The Angular app should start running in **https:localhost:4200**. A new browser window should pop-up with the web running.
