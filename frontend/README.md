@@ -1,6 +1,8 @@
 # Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.1.
+This is the Angular Single Page Application (SPA) for News Portal.
+
+For full local setup (backend + database + frontend), follow the instructions in the root `README.md`.
 
 ## Development server
 
