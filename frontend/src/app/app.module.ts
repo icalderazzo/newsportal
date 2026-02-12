@@ -11,12 +11,16 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { StoriesComponent } from './stories/stories.component';
 import { NewsSharedModule } from './shared/news-shared/news-shared.module';
+import { ConfirmationDialogComponent } from './shared/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({ declarations: [
         AppComponent,
-        StoriesComponent
+        StoriesComponent,
+        ConfirmationDialogComponent
     ],
     bootstrap: [AppComponent], 
     imports: [
@@ -27,6 +31,8 @@ import { NewsSharedModule } from './shared/news-shared/news-shared.module';
         MatButtonModule,
         MatIconModule,
         MatDividerModule,
+        MatDialogModule,
+        MatSnackBarModule,
         NewsSharedModule], 
     providers: [provideHttpClient(withInterceptorsFromDi())] })
 

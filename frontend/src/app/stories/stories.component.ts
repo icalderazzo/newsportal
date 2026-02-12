@@ -3,6 +3,9 @@ import { News } from '../core/models/newsportal/news';
 import { NewsPortalPagedResponse } from '../core/models/newsportal/newsPortalPagedResponse';
 import { NewsportalService } from '../core/services/newsportal.service';
 import { NewspaginatorComponent } from '../shared/news-shared/newspaginator/newspaginator.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmationDialogComponent } from '../shared/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
     selector: 'app-stories',
@@ -13,7 +16,9 @@ import { NewspaginatorComponent } from '../shared/news-shared/newspaginator/news
 export class StoriesComponent implements OnInit {
   
   constructor(
-    private newsPortalService: NewsportalService
+    private newsPortalService: NewsportalService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   @ViewChild(NewspaginatorComponent) paginator: NewspaginatorComponent | undefined;
@@ -61,9 +66,38 @@ export class StoriesComponent implements OnInit {
   onBookmarkToggled(news: News) {
     try {
       if(news.isBookmarked) {
-        this.newsPortalService.deleteBookmark(news.id).subscribe();
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+          data: {
+            title: 'Remove Bookmark',
+            message: 'Are you sure you want to remove this story from your bookmarks?',
+            confirmText: 'Remove',
+            cancelText: 'Cancel'
+          }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            this.newsPortalService.deleteBookmark(news.id).subscribe(() => {
+              this.snackBar.open('The story has been removed from your bookmarks', 'Close', {
+                duration: 3000,
+                horizontalPosition: 'end',
+                verticalPosition: 'top',
+                panelClass: ['success-snackbar']
+              });
+            });
+          } else {
+            news.isBookmarked = true;
+          }
+        });
       } else {
-        this.newsPortalService.bookmarkItem(news.id).subscribe();
+        this.newsPortalService.bookmarkItem(news.id).subscribe(() => {
+          this.snackBar.open('The story has been saved to your bookmarks', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top',
+            panelClass: ['success-snackbar']
+          });
+        });
       }
     } catch (error) {
       console.log(error);

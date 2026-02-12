@@ -3,6 +3,9 @@ import { News } from '../core/models/newsportal/news';
 import { NewsPortalPagedResponse } from '../core/models/newsportal/newsPortalPagedResponse';
 import { NewsportalService } from '../core/services/newsportal.service';
 import { NewspaginatorComponent } from '../shared/news-shared/newspaginator/newspaginator.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmationDialogComponent } from '../shared/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-bookmarks',
@@ -11,7 +14,11 @@ import { NewspaginatorComponent } from '../shared/news-shared/newspaginator/news
   standalone: false,
 })
 export class BookmarksComponent implements OnInit {
-  constructor(private newsPortalService: NewsportalService) {}
+  constructor(
+    private newsPortalService: NewsportalService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) {}
 
   @ViewChild(NewspaginatorComponent) paginator:
     | NewspaginatorComponent
@@ -50,8 +57,27 @@ export class BookmarksComponent implements OnInit {
 
   onDeleteBookmark(news: News) {
     try {
-      this.newsPortalService.deleteBookmark(news.id).subscribe(() => {
-        this.loadNews();
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        data: {
+          title: 'Remove Bookmark',
+          message: 'Are you sure you want to remove this story from your bookmarks?',
+          confirmText: 'Remove',
+          cancelText: 'Cancel'
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.newsPortalService.deleteBookmark(news.id).subscribe(() => {
+            this.snackBar.open('The story has been removed from your bookmarks', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'end',
+              verticalPosition: 'top',
+              panelClass: ['success-snackbar']
+            });
+            this.loadNews();
+          });
+        }
       });
     } catch (error) {
       console.log(error);
